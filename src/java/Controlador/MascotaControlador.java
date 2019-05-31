@@ -43,6 +43,7 @@ public class MascotaControlador extends HttpServlet {
         String Regis = "registrarMascota.jsp";
         String List = "ConsultarMascota.jsp";
         String Editar = "actualizarMascota.jsp";
+        String inicio = "veterinario.jsp";
 
         MascotasVO mascotaVO = new MascotasVO();
         MascotasDAO mascotasDAO = new MascotasDAO();
@@ -97,7 +98,7 @@ public class MascotaControlador extends HttpServlet {
             } else {
                 request.setAttribute("exito", "<script>alert('La mascota no pudo ser actualizada')</script>");
             }
-            acceso = List;
+            acceso = inicio;
         }
 
         RequestDispatcher vista = request.getRequestDispatcher(acceso);

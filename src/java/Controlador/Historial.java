@@ -47,6 +47,7 @@ public class Historial extends HttpServlet {
         String consultar = "ConsultarHistorial.jsp";
         String actualizar = "ActualizarHistorial.jsp";
         String registrar = "registrarHistorial.jsp";
+        String inicio = "veterinario.jsp";
 
         if (action.equalsIgnoreCase("editar")) {
             request.setAttribute("idHistorial", request.getParameter("id"));
@@ -54,33 +55,28 @@ public class Historial extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("Actualizar")) {
             String IdHistorialClinico = request.getParameter("id");
-            String Novedad = request.getParameter("Novedad");
-
+            String Novedad = request.getParameter("novedad");
             historialVo.setNovedad(Novedad);
             historialVo.setIdHistorialClinico(IdHistorialClinico);
-
             if (dao.Actualizar(historialVo)) {
-                request.setAttribute("exito", "<script>alert('Historial actualizado.')</script>");
-                acceso = consultar;
-            } else {
                 request.setAttribute("error", "<script>alert('Historial NO actualizado!')</script>");
-                acceso = consultar;
+            } else {
+                request.setAttribute("exito", "<script>alert('Historial actualizado.')</script>");
             }
-
+            acceso = inicio;
         } else if (action.equalsIgnoreCase("listar")) {
             acceso = consultar;
 
         } else if (action.equalsIgnoreCase("Eliminar")) {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.Eliminar(id)) {
-                request.setAttribute("exito", "<script>alert('Historial eliminado correctamente')</script>");
-            } else {
                 request.setAttribute("error", "<script>alert('Historial NO eliminado!')</script>");
+            } else {
+                request.setAttribute("exito", "<script>alert('Historial eliminado correctamente')</script>");
             }
             acceso = consultar;
         } else if (action.equalsIgnoreCase("Agregar")) {
             acceso = registrar;
-
         } else if (action.equalsIgnoreCase("Registrar")) {
 
             String fecha = request.getParameter("fecha");
@@ -96,13 +92,11 @@ public class Historial extends HttpServlet {
             historialVo.setFKUsuario(usuario);
 
             if (dao.Agregar(historialVo)) {
-                request.setAttribute("exito", "<script>alert('Historial registrado')</script>");
-                acceso = consultar;
-            } else {
                 request.setAttribute("error", "<script>alert('Historial NO registrado!')</script>");
-                acceso = consultar;
+            } else {
+                request.setAttribute("exito", "<script>alert('Historial registrado')</script>");
             }
-
+            acceso = consultar;
         } else {
 
         }

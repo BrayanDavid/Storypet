@@ -44,12 +44,13 @@ public class MascotasDAO extends Conexion implements CRUD_MASCOTA {
 
     @Override
     public boolean Editar(MascotasVO mascotasVO) {
-        String Sql = "Update mascotas set Nombre=" + mascotasVO.getNombre() + " ,FechaNacimiento=" + mascotasVO.getFechaNacimiento() + ",Sexo=" + mascotasVO.getSexo() + " where IdMascota=" + mascotasVO.getIdMascota();
+        String Sql = "Update mascotas set Nombre=" + mascotasVO.getNombre() + " ,FechaNacimiento=" + mascotasVO.getFechaNacimiento() + ",Sexo=" + mascotasVO.getSexo() + " where IdMascota=" + mascotasVO.getIdMascota() + "');";
         try {
             Conn = conexion.obtenerConexion();
             puente = Conn.prepareStatement(Sql);
             puente.executeUpdate(Sql);
         } catch (Exception e) {
+            e.getStackTrace();
         }
         return false;
     }

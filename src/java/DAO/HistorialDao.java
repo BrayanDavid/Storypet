@@ -77,7 +77,7 @@ public class HistorialDao extends Conexion {
             while (rs.next()) {
 
                 historialVo.setIdHistorialClinico(rs.getString("historialclinico.idHistorialClinico"));
-                historialVo.setIdHistorialClinico(rs.getString("historialclinico.Fecha"));
+                historialVo.setFecha(rs.getString("historialclinico.Fecha"));
                 historialVo.setNovedad(rs.getString("historialclinico.Novedad"));
                 historialVo.setFKServicio(rs.getString("servicios.Servicio"));
                 historialVo.setFKMascota(rs.getString("mascotas.Nombre"));

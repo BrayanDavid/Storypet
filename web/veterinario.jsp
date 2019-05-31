@@ -1,4 +1,5 @@
 <%@page session="true"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -418,7 +419,7 @@
                             url: 'Mascota',
                             method: 'POST',
                             data: {'accion': 'Editar', 'id': id},
-                            succes: function (respuesta) {
+                            success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
                                 activarEditarEliminarMascota()
                             },
@@ -455,12 +456,12 @@
                             url: 'Historial',
                             method: 'POST',
                             data: {'accion': 'editar', 'id': id},
-                            succes: function (respuesta) {
+                            success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarMascota()
+                                activarEditarEliminarUsuario()
                             },
                             error: function () {
-                                alert("Error al editar")
+                                alert("No se ha podido editar")
                             }
                         })
                     })
@@ -472,7 +473,7 @@
                             url: 'Historial',
                             method: 'POST',
                             data: {'accion': 'Eliminar', 'id': id},
-                            succes: function (respuesta) {
+                            success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
                                 activarEditarEliminarMascota()
                             },
@@ -485,6 +486,9 @@
                 }
 
                 $(document).ready(function () {
+                    activarEditarEliminarMascota()
+                    activarEditarEliminarUsuario()
+                    activarEditarEliminarHistorial()
                     $.ajax({
                         url: 'Usuario',
                         method: 'POST',
@@ -494,7 +498,7 @@
                             activarEditarEliminarUsuario()
                         },
                         error: function () {
-                            alert("No se ha podido obtener la informaci髇")
+                            alert("No se ha podido obtener la informaci贸n")
                         }
                     })
 
@@ -509,7 +513,7 @@
                                 activarEditarEliminarUsuario()
                             },
                             error: function () {
-                                alert("No se ha podido obtener la informaci髇")
+                                alert("No se ha podido obtener la informaci贸n")
                             }
                         })
                     })
@@ -524,14 +528,13 @@
                                 $("#contenido_principal").html(respuesta)
                             },
                             error: function () {
-                                alert("No se ha podido obtener la informaci髇")
+                                alert("No se ha podido obtener la informaci贸n")
                             }
                         })
                     })
 
 
                     $("#btnHistorial").click(function () {
-
                         $.ajax({
                             url: 'Historial',
                             method: 'POST',
@@ -541,7 +544,7 @@
                                 activarEditarEliminarHistorial()
                             },
                             error: function () {
-                                alert("No se ha podido obtener la informaci髇")
+                                alert("No se ha podido obtener la informaci贸n")
                             }
                         })
 
@@ -559,7 +562,7 @@
                                 activarEditarEliminarMascota()
                             },
                             error: function () {
-                                alert("No se ha podido obtener la informaci髇")
+                                alert("No se ha podido obtener la informaci贸n")
                             }
                         })
 

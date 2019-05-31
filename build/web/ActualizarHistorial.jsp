@@ -12,39 +12,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
-        <title>StoryPet</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-              crossorigin="anonymous">
-        <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-
-        <title>Actualizar Historial</title>
+        <script src="js/jquery.validate.js" ></script>
+        <script src="js/messages_es.js.js"></script>
     </head>
     <body>
+        <%
+            HistorialDao HistorialDao = new HistorialDao();
+            String id = request.getAttribute("idHistorial").toString();
+            HistorialVo HistVo = (HistorialVo) HistorialDao.ListarId(id);
+
+        %>
         <div class="container text-center">
             <h1 class="text-center">Actualizar Historial</h1>
-            <form class="form form-control" action="Historial" method="POST">
-
-                <%
-                    HistorialDao HistorialDao = new HistorialDao();
-                    String id = request.getAttribute("idHistorial").toString();
-                    HistorialVo HistVo = (HistorialVo) HistorialDao.ListarId(id);
-
-                %>
-
-                <label>Novedad:</label><br>
-                <textarea class="inputGroupContainer" placeholder="Novedad" name="novedad" ><%=HistVo.getNovedad()%></textarea><br>
-                <!--input class="inputGroupContainer" type="text" name="Novedad" value="<%=HistVo.getNovedad()%>"!--><br>
-
+            <form action="Historial" method="POST" id="formActualizarHisto">
+                <label>Novedad</label><br>
+                <textarea style="width: 355px;" class="inputGroupContainer" placeholder="Novedad" name="novedad" ><%=HistVo.getNovedad()%></textarea><br>
                 <label>Servicio:</label><br>
                 <input type="text" name="IdServicio" value="<%=HistVo.getFKServicio()%>"><br>
-
                 <input type="hidden" name="id" value="<%= HistVo.getIdHistorialClinico()%>"><br>
-
-                <input class="btn btn-success" type="submit" name="accion" value="Actualizar"> <br><br>
-
+                <input id="btnActualizarHisto" class="btn btn-success" type="submit" name="accion" value="Actualizar"> <br><br>
             </form> 
         </div>
         <%if (request.getAttribute("error") != null) {%>
@@ -52,5 +38,19 @@
         <%} else {%>
         ${exito}
         <%}%> 
+
+        <script>
+            $(document).ready(function () {
+                $("#formActualizarHisto").validate({
+                    rules: {
+                        novedad: {
+                            required: true,
+                        }
+                    }
+                })
+
+            })
+        </script>
+
     </body>
 </html>
