@@ -11,10 +11,9 @@ package VO;
  */
 public class HistorialVo {
 
-    private String Fecha, Novedad, FKServicio, FKMascota, FKUsuario;
-    private int IdHistorialClinico;
+    private String Fecha, Novedad, FKServicio, FKMascota, FKUsuario, IdHistorialClinico;
 
-    public HistorialVo(String Fecha, String Novedad, String FKServicio, String FKMascota, String FKUsuario, int IdHistorialClinico) {
+    public HistorialVo(String Fecha, String Novedad, String FKServicio, String FKMascota, String FKUsuario, String IdHistorialClinico) {
         this.Fecha = Fecha;
         this.Novedad = Novedad;
         this.FKServicio = FKServicio;
@@ -66,11 +65,11 @@ public class HistorialVo {
         this.FKUsuario = FKUsuario;
     }
 
-    public int getIdHistorialClinico() {
+    public String getIdHistorialClinico() {
         return IdHistorialClinico;
     }
 
-    public void setIdHistorialClinico(int IdHistorialClinico) {
+    public void setIdHistorialClinico(String IdHistorialClinico) {
         this.IdHistorialClinico = IdHistorialClinico;
     }
 

@@ -3,7 +3,6 @@
     Created on : 1/04/2019, 09:44:46 PM
     Author     : Admin
 --%>
-
 <%@page import="DAO.UsuarioDAO"%>
 <%@page import="VO.UsuarioVO"%>
 <%@page import="VO.UsuarioVO"%>
@@ -12,19 +11,19 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Actualizar usuario</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
-              crossorigin="anonymous">
+        <script src="js/jquery.validate.js" ></script>
+        <script src="js/messages_es.js.js"></script>
     </head>
     <body>
         <div class="container">   
             <div class="col-lg-6">
-                <form action="Usuario" id="formActualizarUsuario">
-                    <%
-                        UsuarioDAO usuarioDAO = new UsuarioDAO();
-                        String id = request.getAttribute("idUsuario").toString();
-                        UsuarioVO usuarioVO = (UsuarioVO) usuarioDAO.ListarId(id);
-                    %>
+                <%
+                    UsuarioDAO usuarioDAO = new UsuarioDAO();
+                    String id = request.getAttribute("idUsuario").toString();
+                    UsuarioVO usuarioVO = (UsuarioVO) usuarioDAO.ListarId(id);
+
+                %>
+                <form action="Usuario" method="POST" id="formActualizarUsuario">
                     <h1>Actualizar Usuario!</h1>
                     <label>Cedula</label><br>
                     <input class="form-control" readonly="readonly" type="text" name="id" value="<%=usuarioVO.getIdUsuario()%>"><br>
@@ -39,23 +38,34 @@
                     <label>Correo</label><br>
                     <input class="form-control" type="email" id="correo" name="correo" value="<%=usuarioVO.getCorreo()%>"><br>
                     <label>Rol</label><br>
-                    <input class="form-control" type="text" id="rol" name="rol" value="<%=usuarioVO.getRol()%>"><br>         
-                    <a class="btn btn-warning" href="Usuario?accion=listar">Regresar</a>
-                    <input class="btn btn-primary" type="submit" name="accion" value="Actualizar">
+                    <input class="form-control" type="text" id="rol" name="rol" value="<%=usuarioVO.getRol()%>"><br>    
+                    <input id="btnActualizar" class="btn btn-primary" type="submit" name="accion" value="Actualizar">
                 </form>
             </div>
-        </div>
-        <%if (request.getAttribute("error") != null) {%>
-        ${error}
-        <%} else {%>
-        ${exito}
-        <%}%> 
-        <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
-        <script src="js/jquery.validate.js" ></script>
-        <script src="js/messages_es.js.js"></script>
-        
+        </div>                    
+
+
+
         <script>
             $(document).ready(function () {
+
+                //           $("#btnActualizar").click(function () {
+                //             let formulario = $("form").serialize()
+                //           console.log(formulario)
+                //            console.log("Editar Usuario: " + id)
+                //            $.ajax({
+                //                url: 'Usuario',
+                //                method: 'POST',
+                //                data: {'accion': 'Actualizar', 'formulario': formulario},
+                //                success: function (respuesta) {
+                //                    alert('Usuario Actualizado')
+                //                },
+                //                error: function () {
+                //                    alert("No se ha podido actualizar el usuario");
+                //               }
+                //           })
+                //       })
+
                 $("#formActualizarUsuario").validate({
                     rules: {
                         telefono: {
@@ -73,7 +83,14 @@
                     }
                 })
                 ,
-            });
+            })
         </script>
+
+        <%if (request.getAttribute("error") != null) {%>
+        ${error}
+        <%} else {%>
+        ${exito}
+        <%}%> 
+
     </body>
 </html>

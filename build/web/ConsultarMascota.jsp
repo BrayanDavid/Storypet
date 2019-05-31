@@ -17,31 +17,22 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Consultar Mascota</title>
+<script src="js/jquery.validate.js"></script>
+<script src="js/messages_es.js.js"></script>
+<script src="js/datatables.js" type="text/javascript"></script>
 
-<!-- Font Awesome -->
-<link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-<!-- NProgress -->
-<link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
-<!-- iCheck -->
-<link href="./vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-<!-- Datatables -->
-<link href="./vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="./vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-<link href="./vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-<link href="./vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-<link href="./vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
 <style>
     label.error{
         color: red;
     }
 </style>
-<script src="js/jquery.validate.js"></script>
-<script src="js/messages_es.js.js"></script>
+
 
 <div class="container">
-    <h1 class="text-center">Lista Mascotas.!</h1><br>
-    <a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+</a>
+    <h1 class="text-center">Consultar Mascotas.!</h1><br>
+    <a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+ Agregar</a>
+    <br>
+    <br>
     <%
         Conexion conexion = new Conexion();
         Statement puente;
@@ -50,9 +41,9 @@
         rs = puente.executeQuery("SELECT idMascota, mascotas.Nombre, FechaNacimiento, Sexo, razas.Nombre, FKUsuario FROM mascotas INNER JOIN razas ON mascotas.FKRaza = razas.idRaza;");
     %>
 
-    <br>
-    <form action="Mascota">
-        <table id="datatable-keytable" class="table table-striped table-bordered">
+
+    <form action="Mascota" method="POST">
+        <table id="datatable-keytable" class="table table-striped table-bordered" style="width: 100%;">
             <thead>
                 <tr>
                     <td style="border 1px;border-bottom-color: #007bff;" class="text-center">ID</td>
@@ -75,10 +66,10 @@
                     <td class="text-center"><%= rs.getString("Sexo")%></td>                        
                     <td class="text-center"><%= rs.getString("razas.Nombre")%></td>                        
                     <td class="text-center"><%= rs.getString("FKUsuario")%></td>             
-                    <td>
-                        <a class="btn btn-warning" href="Mascota?accion=Editar&id=<%= rs.getString("idMascota")%>">Editar</a>
-                        <a class="btn btn-danger" href="Mascota?accion=Eliminar&id=<%= rs.getString("idMascota")%>">Eliminar</a>
-                        <a class="btn btn-primary" href="Mascota?accion=Estado&id=<%= rs.getString("idMascota")%>&Estado=0">Ocultar</a>
+                    <td class="text-center">
+                        <a class="btn btn-warning" id="btnEditarM" data-id="<%= rs.getString("idMascota")%>">Editar</a>
+                        <a class="btn btn-danger" id="btnEliminarM" data-id="<%= rs.getString("idMascota")%>">Eliminar</a>
+                        <a class="btn btn-primary" data-id="<%= rs.getString("idMascota")%>&Estado=0">Ocultar</a>
                     </td>
                 </tr>
                 <%
@@ -86,7 +77,6 @@
                 %>
             </tbody>
         </table>
-        <a href="Mascota?accion=Listar" class="btn btn-primary">Volver</a>
     </form>
 </div>
 
@@ -104,7 +94,7 @@
                     <label>Nombre</label><br>            
                     <input class="bordes" type="text" name="nombre" style="width: 174px;height: 34px;" placeholder=" Nombre" required="true"><br> 
                     <label>Fecha Nacimiento</label><br>
-                    <input class="bordes" type="date" name="fechaNacimiento"style="width: 174px;height: 34px;" required="true"><br> 
+                    <input class="bordes" min="2011-01-01" max="2019-12-31" type="date" name="fechaNacimiento"style="width: 174px;height: 34px;" required="true"><br> 
                     <label>Sexo</label><br>
                     <select class="bordes" name="sexo"style="width: 174px;height: 34px;" required="true">
                         <option>Seleccione...</option>
@@ -161,9 +151,33 @@
         </div>
     </div>
 </div>
+
 <script>
 
-    $("#btnRegistrar").ready(function () {
+    $('#datatable-keytable').DataTable({
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+    });
+
+    $(document).ready(function () {
         $("#formRegistrarMascota").validate({
             rules: {
                 nombre: {
@@ -193,32 +207,6 @@
 </script>
 
 
-<!-- jQuery -->
-<script src="./vendors/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap -->
-<script src="./vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-<!-- FastClick -->
-<script src="./vendors/fastclick/lib/fastclick.js"></script>
-<!-- NProgress -->
-<script src="./vendors/nprogress/nprogress.js"></script>
-<!-- iCheck -->
-<script src="./vendors/iCheck/icheck.min.js"></script>
-<!-- Datatables -->
-<script src="./vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="./vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-<script src="./vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-<script src="./vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-<script src="./vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-<script src="./vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-<script src="./vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-<script src="./vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-<script src="./vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-<script src="./vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="./vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-<script src="./vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-<script src="./vendors/jszip/dist/jszip.min.js"></script>
-<script src="./vendors/pdfmake/build/pdfmake.min.js"></script>
-<script src="./vendors/pdfmake/build/vfs_fonts.js"></script>
 
 
 <%if (request.getAttribute("error") != null) {%>

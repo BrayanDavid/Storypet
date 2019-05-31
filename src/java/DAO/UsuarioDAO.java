@@ -87,7 +87,7 @@ public class UsuarioDAO extends Conexion implements CRUD_USUARIO {
         return false;
     }
 
-    public List Listar() {
+    public ArrayList<UsuarioVO> Listar() {
         ArrayList<UsuarioVO> List = new ArrayList<>();
         String Sql = "select idUsuario,Usuario,Nombres,Apellidos,Telefono,Correo,Rol from usuarios where Rol = 'user' and Estado=1;";
         try {

@@ -49,11 +49,11 @@ public class Historial extends HttpServlet {
         String registrar = "registrarHistorial.jsp";
 
         if (action.equalsIgnoreCase("editar")) {
-            request.setAttribute("idHisto", request.getParameter("id"));
+            request.setAttribute("idHistorial", request.getParameter("id"));
             acceso = actualizar;
 
         } else if (action.equalsIgnoreCase("Actualizar")) {
-            int IdHistorialClinico = Integer.parseInt(request.getParameter("id"));
+            String IdHistorialClinico = request.getParameter("id");
             String Novedad = request.getParameter("Novedad");
 
             historialVo.setNovedad(Novedad);
@@ -74,12 +74,10 @@ public class Historial extends HttpServlet {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.Eliminar(id)) {
                 request.setAttribute("exito", "<script>alert('Historial eliminado correctamente')</script>");
-                acceso = consultar;
             } else {
                 request.setAttribute("error", "<script>alert('Historial NO eliminado!')</script>");
-                acceso = consultar;
             }
-
+            acceso = consultar;
         } else if (action.equalsIgnoreCase("Agregar")) {
             acceso = registrar;
 

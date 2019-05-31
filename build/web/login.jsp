@@ -21,6 +21,7 @@
 
         <!-- Custom Theme Style -->
         <link href="./build/css/custom.min.css" rel="stylesheet">
+
     </head>
 
     <body class="login">
@@ -65,31 +66,34 @@
 
                 <div id="register" class="animate form registration_form">
                     <section class="login_content">
-                        <form action="Usuario" method="post">
+                        <form action="Usuario" method="post" id="formulario" >
                             <h1>Crear Cuenta</h1>
                             <div>
-                                <input type="text" class="form-control" name="Cedula" placeholder="Cedula" required="" />
+                                <input type="text" class="form-control" name="cedula" placeholder="Cedula" />
                             </div>
                             <div>
-                                <input type="text" class="form-control" name="Usuario" placeholder="Usuario" required="" />
+                                <input type="text" class="form-control" name="usuario" placeholder="Usuario"  />
                             </div>
                             <div>
-                                <input type="password" class="form-control" name="Clave" placeholder="Clave" required="" />
+                                <input type="password" class="form-control" name="clave" placeholder="Clave" />
                             </div>
                             <div>
-                                <input type="text" class="form-control" name="Nombres" placeholder="Nombres" required="" />
+                                <input type="text" class="form-control" name="nombres" placeholder="Nombres"  />
                             </div>
                             <div>
-                                <input type="text" class="form-control" name="Apellidos" placeholder="Apellidos" required="" />
+                                <input type="text" class="form-control" name="apellidos" placeholder="Apellidos" />
                             </div>
                             <div>
-                                <input type="text" class="form-control" name="Telefono" placeholder="Telefono" required="" />
+                                <input type="text" class="form-control" name="telefono" placeholder="Telefono" />
                             </div>
                             <div>
-                                <input type="email" class="form-control" name="Correo" placeholder="Correo" required="" />
+                                <input type="email" class="form-control" name="correo" placeholder="Correo" />
                             </div>                         
                             <div>
-                                <a class="btn btn-default submit" type="submit" name="accion" value="Registrar">Registar</a>
+                                <input type="text" class="form-control" value="usuario" name="rol" readonly=""/>
+                            </div>                         
+                            <div>
+                                <button class="btn btn-default submit" id="btnRegistrar" >Registar</button>
                             </div>
 
                             <div class="clearfix"></div>
@@ -113,11 +117,7 @@
             </div>
         </div>
 
-        <% if (request.getAttribute("error") != null) {%>
-        ${error}
-        <%} else {%>
-        ${exito}
-        <%}%>
+
 
         <%
             if (request.getParameter("cerrar") != null) {
@@ -129,40 +129,58 @@
             }
         %>
 
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
+        <!-- Validaciones -->        
         <script src="js/jquery.validate.js" type="text/javascript"></script>
         <script src="js/messages_es.js.js" type="text/javascript"></script>
+
         <script>
 
 
-            $(document).ready(function ()
-            {
+            $(document).ready(function () {
+
+                $("#btnRegistrar").click(function () {
+
+                    $.ajax({
+                        url: 'Usuario',
+                        method: 'POST',
+                        data: {'accion': 'Registrar', 'datos':},
+                        success: function () {
+                            alert("Usuario Registrado")
+                            // $("#contenido_principal").html(respuesta)
+                        },
+                        error: function () {
+                            alert("Usuario No Registrado");
+                        }
+                    });
+
+                });
+
                 $("#formulario").validate({
                     rules: {
-                        Cedula: {
+                        cedula: {
                             required: true,
                             number: true,
-                            rangelength: [1, 10]
+                            rangelength: [1, 10],
                         },
-                        Usuario: {
-                            required: true
+                        usuario: {
+                            required: true,
                         },
-                        Clave: {
+                        clave: {
                             required: true,
                             pasword: true,
                         },
-                        Nombres: {
-                            required: true
+                        nombres: {
+                            required: true,
                         },
-                        Apellidos: {
-                            required: true
+                        apellidos: {
+                            required: true,
                         },
-                        Telefono: {
+                        telefono: {
                             required: true,
                             number: true,
-                            rangelength: [7, 10]
+                            rangelength: [7, 10],
                         },
-                        Correo: {
+                        correo: {
                             required: true,
                             email: true,
                         },
@@ -186,6 +204,10 @@
             });
         </script>
 
-
+        <% if (request.getAttribute("error") != null) {%>
+        ${error}
+        <%} else {%>
+        ${exito}
+        <%}%>
     </body>
 </html>

@@ -38,13 +38,13 @@ public class Usuario extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-        String action = request.getParameter("accion");
+    String action = request.getParameter("accion");
         String acceso = "";
         String RegistrarVista = "registrarUsuario.jsp";
         String Actualizar = "actualizarUsuario.jsp";
         String consultar = "ListarUsuario.jsp";
         String consultarVet = "listarVet.jsp";
-        String inicio = "index.jsp";
+        String inicio = "veterinario.jsp";
 
         UsuarioVO usuario = new UsuarioVO();
         UsuarioDAO DAO = new UsuarioDAO();
@@ -74,6 +74,7 @@ public class Usuario extends HttpServlet {
             } else {
                 request.setAttribute("exito", "<script>alert('usuario registrado Correctamente')</script>");
             }
+            acceso = inicio;
 
         } else if (action.equalsIgnoreCase("add")) {
             acceso = RegistrarVista;
@@ -106,18 +107,16 @@ public class Usuario extends HttpServlet {
                 request.setAttribute("error", "<script>alert('usuario no actualizado')</script>");
             } else {
                 request.setAttribute("exito", "<script>alert('Usuario actualizado correctamente')</script>");
-                acceso = Actualizar;
             }
-
+            acceso = inicio;
         } else if (action.equalsIgnoreCase("Eliminar")) {
             int id = Integer.parseInt(request.getParameter("id"));
-            acceso = consultar;
             if (DAO.EliminarRegistro(id)) {
                 request.setAttribute("error", "<script>alert('El Usuario no fue Eliminado')</script>");
             } else {
                 request.setAttribute("exito", "<script>alert('El Usuario fue Eliminado correctamente')</script>");
             }
-
+            acceso = inicio;
         } else if (action.equalsIgnoreCase("Estado")) {
             int id = Integer.parseInt(request.getParameter("id"));
             int Estado = Integer.parseInt(request.getParameter("Estado"));
@@ -163,7 +162,7 @@ public class Usuario extends HttpServlet {
                 Sesion.setAttribute("Correo", usuarioVO.getCorreo());
                 Sesion.setAttribute("Rol", usuarioVO.getRol());
 
-                request.getRequestDispatcher("index.jsp").forward(request, response);
+                request.getRequestDispatcher("admin.jsp").forward(request, response);
                 return;
 
             } else if (usuarioRol.equals("RolCliente")) {
@@ -171,7 +170,7 @@ public class Usuario extends HttpServlet {
                 HttpSession Sesion = request.getSession();
                 Sesion.setAttribute("correo", Correo);
                 request.setAttribute("correo", Correo);
-                request.getRequestDispatcher("./index2.jsp").forward(request, response);
+                request.getRequestDispatcher("cliente.jsp").forward(request, response);
                 return;
 
             } else if (usuarioRol.equals("RolVeterinario")) {
@@ -186,7 +185,7 @@ public class Usuario extends HttpServlet {
                 Sesion.setAttribute("Rol", usuarioVO.getRol());
 
                 //  request.getRequestDispatcher("InicioAdmin.jsp").forward(request, response);
-                request.getRequestDispatcher("index3.jsp").forward(request, response);
+                request.getRequestDispatcher("veterinario.jsp").forward(request, response);
 
                 return;
 

@@ -25,17 +25,18 @@
     <body>
         <div class="container text-center">
             <h1 class="text-center">Actualizar Historial</h1>
-            <form class="form form-control" action="Historial">
+            <form class="form form-control" action="Historial" method="POST">
 
                 <%
                     HistorialDao HistorialDao = new HistorialDao();
-                    int id = Integer.parseInt((String) request.getAttribute("idHisto"));
-                    HistorialVo HistVo = (HistorialVo) HistorialDao.List(id);
+                    String id = request.getAttribute("idHistorial").toString();
+                    HistorialVo HistVo = (HistorialVo) HistorialDao.ListarId(id);
 
                 %>
 
                 <label>Novedad:</label><br>
-                <input class="inputGroupContainer" type="text" name="Novedad" value="<%=HistVo.getNovedad()%>"><br>             
+                <textarea class="inputGroupContainer" placeholder="Novedad" name="novedad" ><%=HistVo.getNovedad()%></textarea><br>
+                <!--input class="inputGroupContainer" type="text" name="Novedad" value="<%=HistVo.getNovedad()%>"!--><br>
 
                 <label>Servicio:</label><br>
                 <input type="text" name="IdServicio" value="<%=HistVo.getFKServicio()%>"><br>
@@ -43,8 +44,6 @@
                 <input type="hidden" name="id" value="<%= HistVo.getIdHistorialClinico()%>"><br>
 
                 <input class="btn btn-success" type="submit" name="accion" value="Actualizar"> <br><br>
-
-                <a class="btn btn-warning" href="Historial?accion=listar">Consultar Historial</a>
 
             </form> 
         </div>

@@ -9,6 +9,7 @@ import DAO.MascotasDAO;
 import VO.MascotasVO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.persistence.metamodel.SetAttribute;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,6 +42,7 @@ public class MascotaControlador extends HttpServlet {
         String acceso = "";
         String Regis = "registrarMascota.jsp";
         String List = "ConsultarMascota.jsp";
+        String Editar = "actualizarMascota.jsp";
 
         MascotasVO mascotaVO = new MascotasVO();
         MascotasDAO mascotasDAO = new MascotasDAO();
@@ -68,11 +70,36 @@ public class MascotaControlador extends HttpServlet {
         } else if (action.equalsIgnoreCase("Listar")) {
             acceso = List;
         } else if (action.equalsIgnoreCase("Eliminar")) {
-            String Nombre = request.getParameter("nombre");
- 
-        } else {
+            int id = Integer.parseInt(request.getParameter("id"));
 
+            if (mascotasDAO.Eliminar(id)) {
+                request.setAttribute("erro", "<script>alert('La mascota fue eliminada correctamente')</script>");
+            } else {
+                request.setAttribute("exito", "<script>alert('La mascota fue eliminada correctamente')</script>");
+
+            }
+            acceso = List;
+        } else if (action.equalsIgnoreCase("Editar")) {
+            request.setAttribute("idMascota", request.getParameter("id"));
+            acceso = Editar;
+        } else if (action.equalsIgnoreCase("Actualizar")) {
+            String idRaza = request.getParameter("id");
+            String Nombre = request.getParameter("nombre");
+            String FechaNacimiento = request.getParameter("fecha");
+            String Sexo = request.getParameter("sexo");
+
+            mascotaVO.setIdMascota(idRaza);
+            mascotaVO.setNombre(Nombre);
+            mascotaVO.setFechaNacimiento(FechaNacimiento);
+            mascotaVO.setSexo(Sexo);
+            if (mascotasDAO.Editar(mascotaVO)) {
+                request.setAttribute("error", "<script>alert('La mascota fue actualizada correctamente')</script>");
+            } else {
+                request.setAttribute("exito", "<script>alert('La mascota no pudo ser actualizada')</script>");
+            }
+            acceso = List;
         }
+
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
     }

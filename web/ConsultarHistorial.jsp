@@ -24,28 +24,16 @@
 <html lang="es">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Consultar Historial</title>
-        <!-- Bootstrap -->
-        <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Font Awesome -->
-        <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <!-- NProgress -->
-        <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
-        <!-- iCheck -->
-        <link href="./vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-        <!-- Datatables -->
-        <link href="./vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-        <link href="./vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-        <link href="./vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-        <link href="./vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css" rel="stylesheet">
-        <link href="./vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css" rel="stylesheet">
-
-        <!-- Custom Theme Style -->
-        <link href="./build/css/custom.min.css" rel="stylesheet">
+        <title>Consultar Historial</title>   
+        <script src="js/jquery.validate.js"></script>
+        <script src="js/messages_es.js.js"></script>
+        <script src="js/datatables.js" type="text/javascript"></script>
     </head>
     <body>
 
         <h1 class="text-center">Consultar Historial</h1>
+        <a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+ Agregar</a>
+
         <%
             HttpSession miSesion = request.getSession();
             String cedula;
@@ -56,47 +44,20 @@
             puente = conexion.obtenerConexion().createStatement();
             rs = puente.executeQuery("SELECT historialclinico.idHistorialClinico,historialclinico.Fecha,historialclinico.Novedad,servicios.Servicio,mascotas.Nombre,usuarios.Nombres FROM servicios INNER JOIN historialclinico on servicios.idServicio=historialclinico.FKServicio INNER JOIN mascotas ON historialclinico.FKMascota=mascotas.idMascota INNER JOIN usuarios ON mascotas.FKUsuario=usuarios.idUsuario ;");
         %>
-        <div class="container buscar">
-            <a class="btn btn-outline-success" data-toggle="modal" data-target="#myModal">Registrar</a>
-            <form class="form">
-                <input class="form-control" type="text" id="txtbuscar" placeholder=" ID" name="txtbuscar"/>
-                <input class="btn btn" type="submit" value="Buscar" onclick="validar()"/>
-            </form>   
-            <%
-                String nombrebuscar = request.getParameter("txtbuscar");
-                if (nombrebuscar != null) {
-                    puente = conexion.obtenerConexion().createStatement();
-                    rs = puente.executeQuery("SELECT historialclinico.idHistorialClinico,historialclinico.Fecha,historialclinico.Novedad,servicios.Servicio,mascotas.Nombre,usuarios.Nombres FROM servicios INNER JOIN historialclinico on servicios.idServicio=historialclinico.FKServicio INNER JOIN mascotas ON historialclinico.FKMascota=mascotas.idMascota where historialclinico.Mascota LIKE '%" + nombrebuscar + "%'");
-                } else if (nombrebuscar == "") {
-            %>
-            <script type="text/javascript">
-
-                function validar() {
-                    var texto = document.getElementById("txtbuscar");
-                    if (texto.length == 0) {
-                        alert("Usuario no encontrado");
-                    }
-                }
-            </script>
-            <%
-                }
-            %>
-
-        </div>
 
         <div class="container">
             <form action="Historial">
                 <br>
-                <table id="datatable-keytable" class="table table-striped table-bordered">
+                <table id="datatable-keytable" class="table table-striped table-bordered" style="width: 100%;">
                     <thead>
                         <tr>
-                            <td class="text-center">ID</td>
-                            <td class="text-center">Fecha</td>
-                            <td class="text-center">Novedad</td>
-                            <td class="text-center">Servicio</td>
-                            <td class="text-center">Mascota</td>  
-                            <td class="text-center">Usuario</td>  
-                            <td class="text-center">Acciones</td>
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">ID</td>
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Fecha</td>
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Novedad</td>
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Servicio</td>
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Mascota</td>  
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Usuario</td>  
+                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Acciones</td>
                         </tr>               
 
                     </thead>
@@ -113,8 +74,8 @@
                             <td class="text-center"><%= rs.getString("mascotas.Nombre")%></td>
                             <td class="text-center"><%= rs.getString("usuarios.Nombres")%></td>
                             <td class="text-center">
-                                <a class="btn btn-warning" href ="Historial?accion=editar&id=<%= rs.getString("historialclinico.idHistorialClinico")%>">Editar</a>
-                                <a class="btn btn-danger" href="Historial?accion=eliminar&id=<%= rs.getString("historialclinico.idHistorialClinico")%>">Eliminar</a>
+                                <a class="btn btn-warning" id="btnEditarH" data-id="<%= rs.getString("historialclinico.idHistorialClinico")%>">Editar</a>
+                                <a class="btn btn-danger" id="btnEliminarH" data-id="<%= rs.getString("historialclinico.idHistorialClinico")%>">Eliminar</a>
                             </td>
                         </tr>
                     </tbody>
@@ -122,12 +83,11 @@
                         }
                     %> 
                 </table>
-                <a class="btn btn-success" href="list.jsp">Volver</a>
             </form>
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
@@ -178,22 +138,7 @@
                             </select>
                             <br>
                             <label>Usuario</label><br>
-                            <select name="usuario">
-                                <option>Seleccione...</option>
-                                <%
-                                    UsuarioVO usuarioVO = new UsuarioVO();
-                                    UsuarioDAO usuarioDAO = new UsuarioDAO();
-                                    List<UsuarioVO> Lista = usuarioDAO.Listar();
-                                    for (int i = 0; i < Lista.size(); i++) {
-                                        usuarioVO = Lista.get(i);
-
-                                %>
-                                <option value="<%=usuarioVO.getNombres()%>"><%=usuarioVO.getNombres()%></option>
-
-                                <%
-                                    }
-                                %>
-                            </select>
+                            <input class="bordes" placeholder="Cedula" type="number" name="idUsuario">
                             <br> <br>    
                             <input class="btn btn-outline-primary" type="submit" name="accion" value="Registrar">
                         </form>
@@ -219,38 +164,34 @@
                 document.getElementById("inFecha").value = fecha;
             });
 
+            $('#datatable-keytable').DataTable({
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
+
         </script>
-
-        <!-- jQuery -->
-        <script src="./vendors/jquery/dist/jquery.min.js"></script>
-        <!-- Bootstrap -->
-        <script src="./vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-        <!-- FastClick -->
-        <script src="./vendors/fastclick/lib/fastclick.js"></script>
-        <!-- NProgress -->
-        <script src="./vendors/nprogress/nprogress.js"></script>
-        <!-- iCheck -->
-        <script src="./vendors/iCheck/icheck.min.js"></script>
-        <!-- Datatables -->
-        <script src="./vendors/datatables.net/js/jquery.dataTables.min.js"></script>
-        <script src="./vendors/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
-        <script src="./vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
-        <script src="./vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
-        <script src="./vendors/datatables.net-buttons/js/buttons.flash.min.js"></script>
-        <script src="./vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
-        <script src="./vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
-        <script src="./vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js"></script>
-        <script src="./vendors/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
-        <script src="./vendors/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-        <script src="./vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js"></script>
-        <script src="./vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
-        <script src="./vendors/jszip/dist/jszip.min.js"></script>
-        <script src="./vendors/pdfmake/build/pdfmake.min.js"></script>
-        <script src="./vendors/pdfmake/build/vfs_fonts.js"></script>
-
-        <!-- Custom Theme Scripts -->
-        <script src="./build/js/custom.min.js"></script>
-
-
+        <%if (request.getAttribute("error") != null) {%>
+        ${error}
+        <%} else {%>
+        ${exito}
+        <%}%> 
     </body>
 </html>

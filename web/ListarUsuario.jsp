@@ -1,31 +1,20 @@
-<%-- 
-    Document   : ListarUsuario
-    Created on : 28-may-2019, 11:25:58
-    Author     : Brayan
---%>
 
-<%@page import="Config.Conexion"%>
-<%@page import="java.sql.ResultSet"%>
 <%@page import="java.sql.Statement"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="Config.Conexion"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
+<%@page import="DAO.UsuarioDAO"%>
+<%@page import="VO.UsuarioVO"%>
 
-
-<!-- Datatables -->
-<link href="./vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
-<link href="./vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
-<link href="./vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
-<script src="js/jquery.validate.js"></script>
+<script src="js/datatables.js" type="text/javascript"></script>
+<script src="js/jquery.validate.js" ></script>
 <script src="js/messages_es.js.js"></script>
 
-<style>
-    label.error{
-        color: red;
-    }
-</style>
-
-<h1 class="text-center">Lista Clientes.</h1><br>
-<a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+</a>
+<h1 class="text-center">Consultar Clientes.</h1><br>
+<a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+ Agregar</a>
+<br>
+<br>
 
 <%
     Conexion conexion = new Conexion();
@@ -35,11 +24,11 @@
     rs = puente.executeQuery("select idUsuario,Usuario,Nombres,Apellidos,Telefono,Correo,Rol from usuarios where Rol = 'cliente' and Estado=1;");
 %>
 
-<form action="Usuario" >
-    <table id="datatable-keytable" class="table table-striped table-bordered">
+<form action="Usuario" method="POST">
+    <table id="datatable-keytable" class="table table-striped table-bordered" style="width: 100%;">
         <thead>
             <tr>
-                <td style="border 1px;border-bottom-color: #007bff;" class="text-center">CÃ©dula</td>
+                <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Cédula</td>
                 <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Usuario</td>
                 <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Nombres</td>
                 <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Apellidos</td>
@@ -50,9 +39,11 @@
             </tr>                    
         </thead>
         <tbody>
+
             <%
                 while (rs.next()) {
             %>
+
             <tr>
                 <td class="text-center"><%= rs.getString("idUsuario")%></td>
                 <td class="text-center"><%= rs.getString("Usuario")%></td>
@@ -61,9 +52,9 @@
                 <td class="text-center"><%= rs.getString("Telefono")%></td>
                 <td class="text-center"><%= rs.getString("Correo")%></td>
                 <td class="text-center"><%= rs.getString("Rol")%></td>
-                <td>
-                    <a class="btn btn-warning btnEditar"  href="Usuario?accion=Editar&id=<%=rs.getString("idUsuario")%>">Editar</a>
-                    <a id="btnEliminar"  class="btn btn-danger"  href="Usuario?accion=Eliminar&id=<%=rs.getString("idUsuario")%>">Eliminar</a>
+                <td class="text-center">
+                    <a class="btn btn-warning btnEditarU" data-id="<%=rs.getString("idUsuario")%>">Editar</a>
+                    <a class="btn btn-danger" id="btnEliminarU" data-id="<%=rs.getString("idUsuario")%>">Eliminar</a>
                     <a class="btn btn-primary" href="Usuario?accion=Estado&id=<%=rs.getString("idUsuario")%>&Estado=0">Ocultar</a>
                 </td>
             </tr>
@@ -73,17 +64,19 @@
         </tbody>
     </table>
 </form>
+
+
 <!-- Modal -->
 <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="text-center"> Registrate</h4>
+                <h4 class="text-center"> Registrar Usuario</h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form action="Usuario" class="text-center" id="formRegistrarUsuario">
+                <form action="Usuario" method="POST" class="text-center" id="formRegistrarUsuario">
                     <input style="width: 49%;height: 34px;"name="cedula" id="cedula" class="required" placeholder=" Cedula" type="text">
                     <input style="width: 49%;height: 34px;"name="usuario" id="usuario" class="required" placeholder=" Usuario" type="text"><br><br>
                     <input style="width: 49%;height: 34px;"name="clave" id="clave" class="required" placeholder=" Clave" type="password">
@@ -95,7 +88,7 @@
                         <option value="null"> Seleccione...</option>
                         <option value="cliente"> Usuario</option>                                                            
                     </select><br><br>
-                    <input type="submit" id="btnRegistrar" name="accion" value="Registrar" class="btn btn-outline-primary">                                               
+                    <input id="btnRegistrar" class="btn btn-outline-primary" type="submit" name="accion" value="Registrar">
                 </form>
             </div>
             <div class="modal-footer">
@@ -105,9 +98,31 @@
     </div>
 </div>
 
-
-
 <script>
+
+    $('#datatable-keytable').DataTable({
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
+    });
+
     $(document).ready(function () {
         $("#formRegistrarUsuario").validate({
             rules: {
@@ -121,7 +136,7 @@
                 },
                 clave: {
                     required: true,
-                    pasword: true,
+                    number: true,
                 },
                 nombre: {
                     required: true,
@@ -143,16 +158,26 @@
                 cedula:
                         {
                             required: "Campo obligatorio",
-                            number: "Campo nÃºmerico",
-                            rangelength: "Debe estar entre 1 a 10 dÃ­gitos"
+                            number: "Campo númerico",
+                            rangelength: "Debe estar entre 1 a 10 dígitos",
                         },
                 telefono:
                         {
                             required: "Campo obligatorio",
-                            number: "Campo nÃºmerico",
-                            rangelength: "Debe estar entre 7 a 10 nÃºmeros"
+                            number: "Campo númerico",
+                            rangelength: "Debe estar entre 7 a 10 números",
                         },
             },
-        });
+        })
     });
+
+
 </script>
+
+
+<%if (request.getAttribute(
+            "error") != null) {%>
+${error}
+<%} else {%>
+${exito}
+<%}%> 

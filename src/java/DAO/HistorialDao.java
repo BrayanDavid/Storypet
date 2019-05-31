@@ -68,18 +68,18 @@ public class HistorialDao extends Conexion {
         return false;
     }
 
-    public HistorialVo List(int IdHistorialClinico) {
-        String Sql = "SELECT historialclinico.idHistorialClinico,historialclinico.Fecha,historialclinico.Novedad,servicios.TipoServicio,mascotas.Nombre FROM servicios INNER JOIN historialclinico on servicios.idServicio=historialclinico.FKServicio INNER JOIN mascotas ON historialclinico.FKMascota=mascotas.idMascota where historialclinico.idHistorialClinico =" + IdHistorialClinico;
+    public HistorialVo ListarId(String IdHistorialClinico) {
+        String Sql = "SELECT historialclinico.idHistorialClinico,historialclinico.Fecha,historialclinico.Novedad,servicios.Servicio,mascotas.Nombre FROM servicios INNER JOIN historialclinico on servicios.idServicio=historialclinico.FKServicio INNER JOIN mascotas ON historialclinico.FKMascota=mascotas.idMascota where historialclinico.idHistorialClinico =" + IdHistorialClinico;
         try {
             conn = conex.obtenerConexion();
             puente = conn.prepareStatement(Sql);
             rs = puente.executeQuery(Sql);
             while (rs.next()) {
 
-                historialVo.setIdHistorialClinico(rs.getInt("historialclinico.idHistorialClinico"));
-                historialVo.setIdHistorialClinico(rs.getInt("historialclinico.Fecha"));
+                historialVo.setIdHistorialClinico(rs.getString("historialclinico.idHistorialClinico"));
+                historialVo.setIdHistorialClinico(rs.getString("historialclinico.Fecha"));
                 historialVo.setNovedad(rs.getString("historialclinico.Novedad"));
-                historialVo.setFKServicio(rs.getString("servicios.TipoServicio"));
+                historialVo.setFKServicio(rs.getString("servicios.Servicio"));
                 historialVo.setFKMascota(rs.getString("mascotas.Nombre"));
 
             }
@@ -98,7 +98,7 @@ public class HistorialDao extends Conexion {
             while (rs.next()) {
                 HistorialVo historialVo = new HistorialVo();
 
-                historialVo.setIdHistorialClinico(rs.getInt("idHistorialClinico"));
+                historialVo.setIdHistorialClinico(rs.getString("idHistorialClinico"));
                 historialVo.setNovedad(rs.getString("Novedad"));
                 historialVo.setFKServicio(rs.getString("servicios.TipoServicio"));
                 historialVo.setFKMascota(rs.getString("mascotas.Nombre"));
