@@ -400,7 +400,7 @@
                             data: {'accion': 'Eliminar', 'id': id},
                             success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
-                                //activarEditarEliminarUsuario()
+                                activarEditarEliminarUsuario()
                             },
                             error: function () {
                                 alert("No se ha podido eliminar")
@@ -410,6 +410,41 @@
 
                 }
 
+                function activarEditarEliminarServicio() {
+                    $(".btnEditarS").click(function () {
+                        alert('EditarServicio')
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Servicios',
+                            method: 'POST',
+                            data: {'accion': 'Editar', 'idServicio': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarServicio()
+                            },
+                            error: function () {
+                                alert("No se ha podido editar")
+                            }
+                        })
+                    })
+
+                    $(".btnEliminarS").click(function () {
+                        alert('EliminarServicio')
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Servicios',
+                            method: 'POST',
+                            data: {'accion': 'Eliminar', 'idServicio': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                // activarEditarEliminarServicio()
+                            },
+                            error: function () {
+                                alert("No se ha podido editar")
+                            }
+                        })
+                    })
+                }
 
                 function activarEditarEliminarMascota() {
                     $("#btnEditarM").click(function () {
@@ -489,6 +524,8 @@
                     activarEditarEliminarMascota()
                     activarEditarEliminarUsuario()
                     activarEditarEliminarHistorial()
+                    activarEditarEliminarServicio()
+
                     $.ajax({
                         url: 'Usuario',
                         method: 'POST',
@@ -526,6 +563,7 @@
                             data: {'accion': 'listar'},
                             success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarServicio()
                             },
                             error: function () {
                                 alert("No se ha podido obtener la información")
@@ -550,8 +588,7 @@
 
                     })
 
-                    //Mascota Funciones
-
+                    //Mascota Funcion
                     $("#btnMascotas").click(function () {
                         $.ajax({
                             url: 'Mascota',

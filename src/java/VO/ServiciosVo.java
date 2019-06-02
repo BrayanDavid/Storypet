@@ -12,12 +12,10 @@ package VO;
 public class ServiciosVo {
 
     private String idServicio;
-    private String Fecha;
     private String Servicio;
 
-    public ServiciosVo(String idServicio, String Fecha, String Servicio) {
+    public ServiciosVo(String idServicio, String Servicio) {
         this.idServicio = idServicio;
-        this.Fecha = Fecha;
         this.Servicio = Servicio;
     }
 
@@ -32,14 +30,6 @@ public class ServiciosVo {
         this.idServicio = idServicio;
     }
 
-    public String getFecha() {
-        return Fecha;
-    }
-
-    public void setFecha(String Fecha) {
-        this.Fecha = Fecha;
-    }
-
     public String getTipoServicio() {
         return Servicio;
     }
@@ -47,7 +37,5 @@ public class ServiciosVo {
     public void setTipoServicio(String Servicio) {
         this.Servicio = Servicio;
     }
-    
-    
-    
+
 }

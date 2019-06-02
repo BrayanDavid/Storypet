@@ -18,7 +18,6 @@
         <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
         <!-- Animate.css -->
         <link href="./vendors/animate.css/animate.min.css" rel="stylesheet">
-
         <!-- Custom Theme Style -->
         <link href="./build/css/custom.min.css" rel="stylesheet">
 
@@ -35,10 +34,10 @@
                         <form action="Usuario" method="post" >
                             <h1>Iniciar Sesion</h1>
                             <div>
-                                <input type="text" name="correo" class="form-control" placeholder="Correo" required="" />
+                                <input type="text" name="correo" class="form-control" placeholder="Correo" value="ei@ei.com" required="" />
                             </div>
                             <div>
-                                <input type="password" name="clave" class="form-control" placeholder="Contraseña" required="" />
+                                <input type="password" name="clave" class="form-control" value="123456789" placeholder="Contraseña" required="" />
                             </div>
                             <div>
                                 <input class="btn btn-default submit" type="submit" name="accion" value="ingresar">
@@ -90,44 +89,31 @@
                                 <input type="email" class="form-control" name="correo" placeholder="Correo" />
                             </div>                         
                             <div>
-                                <input type="text" class="form-control" value="usuario" name="rol" readonly=""/>
+                                <input type="hidden" name="rol" value="usuario">                             
                             </div>                         
                             <div>
-                                <button class="btn btn-default submit" id="btnRegistrar" >Registar</button>
-                            </div>
-
-                            <div class="clearfix"></div>
-
-                            <div class="separator">
-                                <p class="change_link">Already a member ?
-                                    <a href="#signin" class="to_register"> Iniciar Sesion </a>
-                                </p>
-
-                                <div class="clearfix"></div>
-                                <br />
-
-                                <div>
-                                    <h1><i class="fa fa-paw"></i> StoryPet!</h1>
-                                    <p>©2016 All Rights Reserved. StoryPet! is a Bootstrap 3 template. Privacy and Terms</p>
-                                </div>
+                                <button class="btn btn-default submit" id="btnRegistrar" type="submit" >Registar</button>
                             </div>
                         </form>
+                        <div class="clearfix"></div>
+
+                        <div class="separator">
+                            <p class="change_link">Already a member ?
+                                <a href="#signin" class="to_register"> Iniciar Sesion </a>
+                            </p>
+                            <div class="clearfix"></div>
+                            <br />
+
+                            <div>
+                                <h1><i class="fa fa-paw"></i> StoryPet!</h1>
+                                <p>©2016 All Rights Reserved. StoryPet! is a Bootstrap 3 template. Privacy and Terms</p>
+                            </div>
+                        </div>
+
                     </section>
                 </div>
             </div>
         </div>
-
-
-
-        <%
-            if (request.getParameter("cerrar") != null) {
-                HttpSession sesion = request.getSession();
-                sesion.invalidate();
-                response.sendRedirect("login.jsp");
-            } else {
-
-            }
-        %>
 
         <!-- Validaciones -->        
         <script src="js/jquery.validate.js" type="text/javascript"></script>
@@ -135,32 +121,19 @@
 
         <script>
 
+            $("#formulario").submit(function () {
+                return false
+            })
 
-            $(document).ready(function () {
-
-                $("#btnRegistrar").click(function () {
-
-                    $.ajax({
-                        url: 'Usuario',
-                        method: 'POST',
-                        data: {'accion': 'Registrar', 'datos':},
-                        success: function () {
-                            alert("Usuario Registrado")
-                            // $("#contenido_principal").html(respuesta)
-                        },
-                        error: function () {
-                            alert("Usuario No Registrado");
-                        }
-                    });
-
-                });
-
+            $("#btnRegistrar").click(function () {
+                let formulario = $("form").serialize()
+                $("#formulario").submit()
                 $("#formulario").validate({
                     rules: {
                         cedula: {
                             required: true,
                             number: true,
-                            rangelength: [1, 10],
+                            rangelength: [9, 10],
                         },
                         usuario: {
                             required: true,
@@ -184,25 +157,49 @@
                             required: true,
                             email: true,
                         },
-
                     },
                     messages: {
-                        Cedula:
-                                {
-                                    required: "Campo obligatorio",
-                                    number: "Campo númerico",
-                                    rangelength: "Debe estar entre 1 a 10 dígitos"
-                                },
-                        Telefono:
-                                {
-                                    required: "Campo obligatorio",
-                                    number: "Campo númerico",
-                                    rangelength: "Debe estar entre 7 a 10 números"
-                                },
+                        Cedula: {
+                            required: "Campo obligatorio",
+                            number: "Campo númerico",
+                            rangelength: "Debe estar entre 1 a 10 dígitos"
+                        },
+                        Telefono: {
+                            required: "Campo obligatorio",
+                            number: "Campo númerico",
+                            rangelength: "Debe estar entre 7 a 10 números"
+                        }
                     },
-                });
-            });
+                    submitHandler: function () {
+                        $.ajax({
+                            url: 'Usuario',
+                            method: 'POST',
+                            data: {'accion': 'Registrar', 'datos': formulario},
+                            success: function () {
+                                alert("Usuario Registrado")
+                                // $("#contenido_principal").html(respuesta)
+                            },
+                            error: function () {
+                                alert("Usuario No Registrado");
+                            }
+                        })
+                    }
+
+                })
+
+            })
+
         </script>
+
+        <%
+            if (request.getParameter("cerrar") != null) {
+                HttpSession sesion = request.getSession();
+                sesion.invalidate();
+                response.sendRedirect("login.jsp");
+            } else {
+
+            }
+        %>
 
         <% if (request.getAttribute("error") != null) {%>
         ${error}

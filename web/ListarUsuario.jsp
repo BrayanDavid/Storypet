@@ -24,6 +24,7 @@
     rs = puente.executeQuery("select idUsuario,Usuario,Nombres,Apellidos,Telefono,Correo,Rol from usuarios where Rol = 'cliente' and Estado=1;");
 %>
 
+
 <form action="Usuario" method="POST">
     <table id="datatable-keytable" class="table table-striped table-bordered" style="width: 100%;">
         <thead>
@@ -124,50 +125,74 @@
     });
 
     $(document).ready(function () {
-        $("#formRegistrarUsuario").validate({
-            rules: {
-                cedula: {
-                    required: true,
-                    number: true,
-                    rangelength: [1, 10],
+
+        $("#formRegistrarUsuario").submit(function () {
+            return false
+        })
+
+        $("#btnRegistrar").click(function () {
+            let formulario = $("form").serialize()
+            $("#formRegistrarUsuario").submit()
+            $("#formRegistrarUsuario").validate({
+                rules: {
+                    cedula: {
+                        required: true,
+                        number: true,
+                        rangelength: [1, 10],
+                    },
+                    usuario: {
+                        required: true,
+                    },
+                    clave: {
+                        required: true,
+                        number: true,
+                    },
+                    nombre: {
+                        required: true,
+                    },
+                    apellidos: {
+                        required: true,
+                    },
+                    telefono: {
+                        required: true,
+                        number: true,
+                        rangelength: [7, 10],
+                    },
+                    correo: {
+                        required: true,
+                        email: true,
+                    },
                 },
-                usuario: {
-                    required: true,
+                messages: {
+                    cedula:
+                            {
+                                required: "Campo obligatorio",
+                                number: "Campo númerico",
+                                rangelength: "Debe estar entre 1 a 10 dígitos",
+                            },
+                    telefono:
+                            {
+                                required: "Campo obligatorio",
+                                number: "Campo númerico",
+                                rangelength: "Debe estar entre 7 a 10 números",
+                            },
                 },
-                clave: {
-                    required: true,
-                    number: true,
-                },
-                nombre: {
-                    required: true,
-                },
-                apellidos: {
-                    required: true,
-                },
-                telefono: {
-                    required: true,
-                    number: true,
-                    rangelength: [7, 10],
-                },
-                correo: {
-                    required: true,
-                    email: true,
-                },
-            },
-            messages: {
-                cedula:
-                        {
-                            required: "Campo obligatorio",
-                            number: "Campo númerico",
-                            rangelength: "Debe estar entre 1 a 10 dígitos",
+                submitHandler: function () {
+                    $.ajax({
+                        url: 'Usuario',
+                        method: 'POST',
+                        data: {'accion': 'Registrar', 'datos': formulario},
+                        success: function () {
+                            alert("Usuario Registrado")
+                            // $("#contenido_principal").html(respuesta)
                         },
-                telefono:
-                        {
-                            required: "Campo obligatorio",
-                            number: "Campo númerico",
-                            rangelength: "Debe estar entre 7 a 10 números",
-                        },
-            },
+                        error: function () {
+                            alert("Usuario No Registrado");
+                        }
+                    })
+                }
+
+            })
         })
     });
 
@@ -175,8 +200,7 @@
 </script>
 
 
-<%if (request.getAttribute(
-            "error") != null) {%>
+<%if (request.getAttribute("error") != null) {%>
 ${error}
 <%} else {%>
 ${exito}
