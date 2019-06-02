@@ -38,13 +38,15 @@ public class Usuario extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
-    String action = request.getParameter("accion");
+        String action = request.getParameter("accion");
         String acceso = "";
         String RegistrarVista = "registrarUsuario.jsp";
         String Actualizar = "actualizarUsuario.jsp";
         String consultar = "ListarUsuario.jsp";
+        String consulta2 = "ListarVeterinarios.jsp";
         String consultarVet = "listarVet.jsp";
         String inicio = "veterinario.jsp";
+        String inicio2 = "administrador.jsp";
 
         UsuarioVO usuario = new UsuarioVO();
         UsuarioDAO DAO = new UsuarioDAO();
@@ -76,10 +78,39 @@ public class Usuario extends HttpServlet {
             }
             acceso = inicio;
 
+        } else if (action.equalsIgnoreCase("RegistrarVeterinario")) {
+
+            String idUsuario = request.getParameter("cedula");
+            String Usuario = request.getParameter("usuario");
+            String Contraseña = request.getParameter("clave");
+            String Nombres = request.getParameter("nombres");
+            String Apellidos = request.getParameter("apellidos");
+            String Telefono = request.getParameter("telefono");
+            String Correo = request.getParameter("correo");
+            String Rol = request.getParameter("rol");
+
+            usuario.setIdUsuario(idUsuario);
+            usuario.setUsuario(Usuario);
+            usuario.setContraseña(Contraseña);
+            usuario.setNombres(Nombres);
+            usuario.setApellidos(Apellidos);
+            usuario.setTelefono(Telefono);
+            usuario.setCorreo(Correo);
+            usuario.setRol(Rol);
+
+            if (DAO.AgregarRegistro(usuario)) {
+                request.setAttribute("error", "<script>alert('usuario no registrado')</script>");
+            } else {
+                request.setAttribute("exito", "<script>alert('usuario registrado Correctamente')</script>");
+            }
+            acceso = inicio2;
+
         } else if (action.equalsIgnoreCase("add")) {
             acceso = RegistrarVista;
         } else if (action.equalsIgnoreCase("listar")) {
             acceso = consultar;
+        } else if (action.equalsIgnoreCase("listarVeterinario")) {
+            acceso = consulta2;
         } else if (action.equalsIgnoreCase("Editar")) {
             //recojemos parametro id & manda mos parametro idUsuario a la vista actualizar
             request.setAttribute("idUsuario", request.getParameter("id"));
@@ -162,7 +193,7 @@ public class Usuario extends HttpServlet {
                 Sesion.setAttribute("Correo", usuarioVO.getCorreo());
                 Sesion.setAttribute("Rol", usuarioVO.getRol());
 
-                request.getRequestDispatcher("admin.jsp").forward(request, response);
+                request.getRequestDispatcher("administrador.jsp").forward(request, response);
                 return;
 
             } else if (usuarioRol.equals("RolCliente")) {

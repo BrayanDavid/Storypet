@@ -1,6 +1,8 @@
 <%@page session="true"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
+
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <!-- Meta, title, CSS, favicons, etc. -->
@@ -10,19 +12,28 @@
 
         <title>StoryPet! | </title>
 
+        <!-- Datatables -->
+        <link href="./vendors/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
+        <link href="./vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css" rel="stylesheet">
+        <link href="./vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css" rel="stylesheet">
         <!-- Bootstrap -->
         <link href="./vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Font Awesome -->
         <link href="./vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
         <!-- NProgress -->
         <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
+        <!-- bootstrap-progressbar -->
+        <link href="./vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
         <!-- bootstrap-daterangepicker -->
         <link href="./vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
         <!-- Tabla -->
         <script src="js/datatables.js" type="text/javascript"></script>
-
         <!-- Custom Theme Style -->
         <link href="./build/css/custom.min.css" rel="stylesheet">
+
+        <script src="js/jquery.validate.js"></script>
+        <script src="js/messages_es.js.js"></script>
+
     </head>
 
     <body class="nav-md">
@@ -74,10 +85,10 @@
                                 <ul class="nav side-menu">
                                     <li><a><i class="fa fa-home"></i> Inicio <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a href="admin3.jsp">Clientes</a></li>
-                                            <li><a href="admin2.jsp">Mascotas</a></li>
-                                            <li><a href="index.jsp">Historial</a></li>
-                                            <li><a href="admin4.jsp">Servicios</a></li>
+                                            <li><a id="btnClientes">Clientes</a></li>  <!-- Clientes admin3 -->
+                                            <li><a id="btnMascotas" >Mascotas</a></li>  <!-- Mascotas admin2 -->
+                                            <li><a id="btnHistorial">Historial</a></li>  <!-- Historia index -->
+                                            <li><a id="btnServicios">Servicios</a></li>  <!-- servicios admin4 -->
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -214,6 +225,7 @@
                                             </a>
                                         </li>
                                         <li><a href="javascript:;">Ayuda</a></li>
+
                                         <li>
                                             <%
                                                 out.print("<a class='btn-danger' href='login.jsp?cerrar=true'><i class='fa fa-sign-out pull-right'></i> Salir</a>");
@@ -298,8 +310,6 @@
                     <div class="row tile_count">
                         <div class="row top_tiles" style="margin: 10px 0;">
                             <div id="contenido_principal">
-
-
                             </div>   
                         </div>
                         <!-- /top tiles -->
@@ -311,11 +321,14 @@
                         <div class="pull-right">
                             Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
                         </div>
-                        <div class="clearfix"></div>
                     </footer>
                     <!-- /footer content -->
                 </div>
             </div>
+
+
+            <!-- Custom Theme Scripts -->
+            <script src="./build/js/custom.min.js"></script>
 
             <!-- jQuery -->
             <script src="./vendors/jquery/dist/jquery.min.js"></script>
@@ -329,6 +342,15 @@
             <script src="./vendors/Chart.js/dist/Chart.min.js"></script>
             <!-- jQuery Sparklines -->
             <script src="./vendors/jquery-sparkline/dist/jquery.sparkline.min.js"></script>
+            <!-- morris.js -->
+            <script src="./vendors/raphael/raphael.min.js"></script>
+            <script src="./vendors/morris.js/morris.min.js"></script>
+            <!-- gauge.js -->
+            <script src="./vendors/gauge.js/dist/gauge.min.js"></script>
+            <!-- bootstrap-progressbar -->
+            <script src="./vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+            <!-- Skycons -->
+            <script src="./vendors/skycons/skycons.js"></script>
             <!-- Flot -->
             <script src="./vendors/Flot/jquery.flot.js"></script>
             <script src="./vendors/Flot/jquery.flot.pie.js"></script>
@@ -349,28 +371,247 @@
             <script src="./build/js/custom.min.js"></script>
 
             <script>
+                function activarEditarEliminarUsuario() {
+                    $(".btnEditarU").click(function () {
+                        alert('btnEditarU')
+                        var id = $(this).attr("data-id")
+                        console.log("Editar Usuario: " + id)
+                        $.ajax({
+                            url: 'Usuario',
+                            method: 'POST',
+                            data: {'accion': 'Editar', 'id': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarUsuario()
+                            },
+                            error: function () {
+                                alert("No se ha podido editar")
+                            }
+                        })
+                    })
+
+                    $("#btnEliminarU").click(function () {
+                        alert('btnEliminarU')
+                        var id = $(this).attr("data-id")
+                        console.log("Eliminar Usuario: " + id)
+                        $.ajax({
+                            url: 'Usuario',
+                            method: 'POST',
+                            data: {'accion': 'Eliminar', 'id': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarUsuario()
+                            },
+                            error: function () {
+                                alert("No se ha podido eliminar")
+                            }
+                        })
+                    })
+
+                }
+
+                function activarEditarEliminarServicio() {
+                    $(".btnEditarS").click(function () {
+                        alert('EditarServicio')
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Servicios',
+                            method: 'POST',
+                            data: {'accion': 'Editar', 'idServicio': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarServicio()
+                            },
+                            error: function () {
+                                alert("No se ha podido editar")
+                            }
+                        })
+                    })
+
+                    $(".btnEliminarS").click(function () {
+                        alert('EliminarServicio')
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Servicios',
+                            method: 'POST',
+                            data: {'accion': 'Eliminar', 'idServicio': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                // activarEditarEliminarServicio()
+                            },
+                            error: function () {
+                                alert("No se ha podido editar")
+                            }
+                        })
+                    })
+                }
+
+                function activarEditarEliminarMascota() {
+                    $("#btnEditarM").click(function () {
+                        alert("editarMascota")
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Mascota',
+                            method: 'POST',
+                            data: {'accion': 'Editar', 'id': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarMascota()
+                            },
+                            error: function () {
+                                alert("Error al editar")
+                            }
+                        })
+                    })
+
+                    $("#btnEliminarM").click(function () {
+                        alert("eliminarrMascota")
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Mascota',
+                            method: 'POST',
+                            data: {'accion': 'Eliminar', 'id': id},
+                            succes: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarMascota()
+                            },
+                            error: function () {
+                                alert("Error al eliminar")
+                            }
+                        })
+                    })
+
+                }
+
+                function activarEditarEliminarHistorial() {
+                    $("#btnEditarH").click(function () {
+                        alert("editar historial")
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Historial',
+                            method: 'POST',
+                            data: {'accion': 'editar', 'id': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarUsuario()
+                            },
+                            error: function () {
+                                alert("No se ha podido editar")
+                            }
+                        })
+                    })
+
+                    $("#btnEliminarM").click(function () {
+                        alert("eliminarrMascota")
+                        var id = $(this).attr("data-id")
+                        $.ajax({
+                            url: 'Historial',
+                            method: 'POST',
+                            data: {'accion': 'Eliminar', 'id': id},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarMascota()
+                            },
+                            error: function () {
+                                alert("Error al eliminar")
+                            }
+                        })
+                    })
+
+                }
+
                 $(document).ready(function () {
+                    activarEditarEliminarMascota()
+                    activarEditarEliminarUsuario()
+                    activarEditarEliminarHistorial()
+                    activarEditarEliminarServicio()
 
                     $.ajax({
-                        url: 'Mascota',
+                        url: 'Usuario',
                         method: 'POST',
-                        data: {'accion': 'Listar'},
+                        data: {'accion': 'listarVeterinario'},
                         success: function (respuesta) {
-                            $("#contenido_principal").html(respuesta);
+                            $("#contenido_principal").html(respuesta)
+                            activarEditarEliminarUsuario()
                         },
                         error: function () {
-                            alert("No se ha podido obtener la informaci髇");
+                            alert("No se ha podido obtener la informaci贸n")
                         }
-                    });
+                    })
+
+
+                    $("#btnClientes").click(function () {
+                        $.ajax({
+                            url: 'Usuario',
+                            method: 'POST',
+                            data: {'accion': 'listarVeterinario'},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarUsuario()
+                            },
+                            error: function () {
+                                alert("No se ha podido obtener la informaci贸n")
+                            }
+                        })
+                    })
+
+
+                    $("#btnServicios").click(function () {
+                        $.ajax({
+                            url: 'Servicios',
+                            method: 'POST',
+                            data: {'accion': 'listar'},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarServicio()
+                            },
+                            error: function () {
+                                alert("No se ha podido obtener la informaci贸n")
+                            }
+                        })
+                    })
+
+
+                    $("#btnHistorial").click(function () {
+                        $.ajax({
+                            url: 'Historial',
+                            method: 'POST',
+                            data: {'accion': 'listar'},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarHistorial()
+                            },
+                            error: function () {
+                                alert("No se ha podido obtener la informaci贸n")
+                            }
+                        })
+
+                    })
+
+                    //Mascota Funcion
+                    $("#btnMascotas").click(function () {
+                        $.ajax({
+                            url: 'Mascota',
+                            method: 'POST',
+                            data: {'accion': 'Listar'},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                                activarEditarEliminarMascota()
+                            },
+                            error: function () {
+                                alert("No se ha podido obtener la informaci贸n")
+                            }
+                        })
+
+                    })
 
                 })
-
             </script>
+
             <%if (request.getAttribute("error") != null) {%>
             ${error}
             <%} else {%>
             ${exito}
             <%}%> 
-
     </body>
 </html>
