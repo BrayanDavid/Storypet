@@ -381,22 +381,22 @@
             <script>
 
                 function activarEditarEliminarMascota() {
-                    $("#btnEditarM").click(function () {
-                        alert("editarMascota")
-                        var id = $(this).attr("data-id")
-                        $.ajax({
-                            url: 'Mascota',
-                            method: 'POST',
-                            data: {'accion': 'Editar', 'id': id},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarMascota()
-                            },
-                            error: function () {
-                                alert("Error al editar")
-                            }
-                        })
-                    })
+                    //              $("#btnEditarM").click(function () {
+                    //                  alert("editarMascota")
+                    //                 var id = $(this).attr("data-id")
+                    //                 $.ajax({
+                    //                     url: 'Mascota',
+                    //                      method: 'POST',
+                    //                      data: {'accion': 'Editar', 'id': id},
+                    //                      success: function (respuesta) {
+                    //                         $("#contenido_principal").html(respuesta)
+                    //                         activarEditarEliminarMascota()
+                    //                     },
+                    //                      error: function () {
+                    //                          alert("Error al editar")
+                    //                       }
+                    //                  })
+                    //             })
 
                     $("#btnEliminarM").click(function () {
                         alert("eliminarrMascota")
@@ -456,17 +456,16 @@
 
                 $(document).ready(function () {
                     activarEditarEliminarMascota()
-                    activarEditarEliminarUsuario()
                     activarEditarEliminarHistorial()
-                    activarEditarEliminarServicio()
+
 
                     $.ajax({
-                        url: 'Usuario',
+                        url: 'Mascota',
                         method: 'POST',
-                        data: {'accion': 'listar'},
+                        data: {'accion': 'ListarMascotaUsuario'},
                         success: function (respuesta) {
                             $("#contenido_principal").html(respuesta)
-                            activarEditarEliminarUsuario()
+                            activarEditarEliminarMascota()
                         },
                         error: function () {
                             alert("No se ha podido obtener la información")
@@ -478,7 +477,7 @@
                         $.ajax({
                             url: 'Historial',
                             method: 'POST',
-                            data: {'accion': 'listar'},
+                            data: {'accion': 'ListarHistorialUsuario'},
                             success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
                                 activarEditarEliminarHistorial()
@@ -495,7 +494,7 @@
                         $.ajax({
                             url: 'Mascota',
                             method: 'POST',
-                            data: {'accion': 'Listar'},
+                            data: {'accion': 'ListarMascotaUsuario'},
                             success: function (respuesta) {
                                 $("#contenido_principal").html(respuesta)
                                 activarEditarEliminarMascota()

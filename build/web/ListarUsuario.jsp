@@ -15,7 +15,16 @@
 <a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+ Agregar</a>
 <br>
 <br>
+<style>
+    label.error{
+        color: red;
 
+    }
+    input.error{
+        border-color: red;
+    }
+
+</style>
 <%
     Conexion conexion = new Conexion();
     Statement puente;
@@ -124,14 +133,18 @@
         },
     });
 
-    $(document).ready(function () {
+    $("#formRegistrarUsuario").submit(function () {
+        return false
+    })
 
+    $("#btnRegistrar").click(function () {
+        $("#formRegistrarUsuario").submit()
         $("#formRegistrarUsuario").validate({
             rules: {
                 cedula: {
                     required: true,
                     number: true,
-                    rangelength: [1, 10],
+                    rangelength: [9, 10],
                 },
                 usuario: {
                     required: true,
@@ -140,7 +153,7 @@
                     required: true,
                     number: true,
                 },
-                nombre: {
+                nombres: {
                     required: true,
                 },
                 apellidos: {
@@ -157,6 +170,22 @@
                 },
             },
             messages: {
+                correo: {
+                    required: "Campo obligatorio",
+                    email: "ingrese una direccion valida"
+                },
+
+                apellidos: {
+                    required: "Campo obligatorio",
+                },
+
+                nombres: {
+                    required: "Campo obligatorio",
+                },
+
+                usuario: {
+                    required: "Campo obligatorio",
+                },
                 cedula:
                         {
                             required: "Campo obligatorio",
@@ -169,57 +198,19 @@
                             number: "Campo númerico",
                             rangelength: "Debe estar entre 7 a 10 números",
                         },
+                clave: {
+                    required: "Campo obligatorio",
+                    number: "Campo númerico",
+                }
             },
-        })
+            submitHandler: function () {
+                $("#formRegistrarUsuario").submit(function () {
+                    return true
+                })
 
-        $("#btnRegistrar").click(function () {
-            $("#formRegistrarUsuario").validate({
-                rules: {
-                    cedula: {
-                        required: true,
-                        number: true,
-                        rangelength: [1, 10],
-                    },
-                    usuario: {
-                        required: true,
-                    },
-                    clave: {
-                        required: true,
-                        number: true,
-                    },
-                    nombre: {
-                        required: true,
-                    },
-                    apellidos: {
-                        required: true,
-                    },
-                    telefono: {
-                        required: true,
-                        number: true,
-                        rangelength: [7, 10],
-                    },
-                    correo: {
-                        required: true,
-                        email: true,
-                    },
-                },
-                messages: {
-                    cedula:
-                            {
-                                required: "Campo obligatorio",
-                                number: "Campo númerico",
-                                rangelength: "Debe estar entre 1 a 10 dígitos",
-                            },
-                    telefono:
-                            {
-                                required: "Campo obligatorio",
-                                number: "Campo númerico",
-                                rangelength: "Debe estar entre 7 a 10 números",
-                            },
-                },
-            })
+            }
         })
-    });
+    })
 
 
 </script>

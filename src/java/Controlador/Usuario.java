@@ -205,6 +205,7 @@ public class Usuario extends HttpServlet {
 
             if (Rol.equals("admin")) {
                 HttpSession Sesion = request.getSession();
+                Sesion.setAttribute("Cedula", usuario.getIdUsuario());
                 Sesion.setAttribute("Correo", Correo);
                 Sesion.setAttribute("Usuario", usuario.getUsuario());
                 Sesion.setAttribute("Nombres", usuario.getNombres());
@@ -218,6 +219,7 @@ public class Usuario extends HttpServlet {
 
             } else if (Rol.equals("cliente")) {
                 HttpSession Sesion = request.getSession();
+                Sesion.setAttribute("Cedula", usuario.getIdUsuario());
                 Sesion.setAttribute("Correo", Correo);
                 Sesion.setAttribute("Usuario", usuario.getUsuario());
                 Sesion.setAttribute("Nombres", usuario.getNombres());
@@ -231,6 +233,7 @@ public class Usuario extends HttpServlet {
 
             } else if (Rol.equals("veterinario")) {
                 HttpSession Sesion = request.getSession();
+                Sesion.setAttribute("Cedula", usuario.getIdUsuario());
                 Sesion.setAttribute("Correo", usuario.getCorreo());
                 Sesion.setAttribute("Usuario", usuario.getUsuario());
                 Sesion.setAttribute("Nombres", usuario.getNombres());

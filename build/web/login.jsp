@@ -31,7 +31,7 @@
             <div class="login_wrapper">
                 <div class="animate form login_form">
                     <section class="login_content">                       
-                        <form action="Usuario" method="post" >
+                        <form action="Usuario" method="post" class="InicioForm" >
                             <h1>Iniciar Sesion</h1>
                             <div>
                                 <input type="text" name="correo" class="form-control" placeholder="Correo" value="ei@ei.com" required="" />
@@ -40,7 +40,7 @@
                                 <input type="password" name="clave" class="form-control" value="123456789" placeholder="Contraseña" required="" />
                             </div>
                             <div>
-                                <input class="btn btn-default submit" type="submit" name="accion" value="ingresar">
+                                <input class="btn btn-default submit btnIngresar" type="submit" name="accion" value="ingresar">
                                 <a class="reset_pass" href="#">Olvidaste tu contraseña?</a>
                             </div>
 
@@ -121,13 +121,21 @@
 
         <script>
 
-            $("#formulario").submit(function () {
-                return false
+            $(".btnIngresar").click(function () {
+                $(".InicioForm").validate({
+                    rules: {
+                        correo: {
+                            required: true,
+                            email: true,
+                        },
+                        clave: {
+                            required: true,
+                        }
+                    }
+                })
             })
 
             $("#btnRegistrar").click(function () {
-                let formulario = $("form").serialize()
-                $("#formulario").submit()
                 $("#formulario").validate({
                     rules: {
                         cedula: {
@@ -170,20 +178,6 @@
                             rangelength: "Debe estar entre 7 a 10 números"
                         }
                     },
-                    submitHandler: function () {
-                        $.ajax({
-                            url: 'Usuario',
-                            method: 'POST',
-                            data: {'accion': 'Registrar', 'datos': formulario},
-                            success: function () {
-                                alert("Usuario Registrado")
-                                // $("#contenido_principal").html(respuesta)
-                            },
-                            error: function () {
-                                alert("Usuario No Registrado");
-                            }
-                        })
-                    }
 
                 })
 

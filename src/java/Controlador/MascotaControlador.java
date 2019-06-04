@@ -42,6 +42,7 @@ public class MascotaControlador extends HttpServlet {
         String acceso = "";
         String Regis = "registrarMascota.jsp";
         String List = "ConsultarMascota.jsp";
+        String ListadoUsuarioMascota = "ConsultarMascotaUsuario.jsp";
         String Editar = "actualizarMascota.jsp";
         String inicio = "veterinario.jsp";
 
@@ -70,6 +71,8 @@ public class MascotaControlador extends HttpServlet {
 
         } else if (action.equalsIgnoreCase("Listar")) {
             acceso = List;
+        } else if (action.equalsIgnoreCase("ListarMascotaUsuario")) {
+            acceso = ListadoUsuarioMascota;
         } else if (action.equalsIgnoreCase("Eliminar")) {
             int id = Integer.parseInt(request.getParameter("id"));
 

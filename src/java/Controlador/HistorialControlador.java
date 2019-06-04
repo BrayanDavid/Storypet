@@ -36,13 +36,14 @@ public class HistorialControlador extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
-         String action = request.getParameter("accion");
+
+        String action = request.getParameter("accion");
         HistorialVo historialVo = new HistorialVo();
         HistorialDao dao = new HistorialDao();
 
         String acceso = "";
 
+        String ListarHistoUsuario = "ConsultaHistorialUsuario.jsp";
         String consultar = "ConsultarHistorial.jsp";
         String actualizar = "ActualizarHistorial.jsp";
         String registrar = "registrarHistorial.jsp";
@@ -65,7 +66,8 @@ public class HistorialControlador extends HttpServlet {
             acceso = inicio;
         } else if (action.equalsIgnoreCase("listar")) {
             acceso = consultar;
-
+        } else if (action.equalsIgnoreCase("ListarHistorialUsuario")) {
+            acceso = ListarHistoUsuario;
         } else if (action.equalsIgnoreCase("Eliminar")) {
             int id = Integer.parseInt(request.getParameter("id"));
             if (dao.Eliminar(id)) {
@@ -91,7 +93,7 @@ public class HistorialControlador extends HttpServlet {
             historialVo.setFKUsuario(usuario);
 
             if (dao.Agregar(historialVo)) {
-                  request.setAttribute("exito", "<script>alert('Historial registrado')</script>");   
+                request.setAttribute("exito", "<script>alert('Historial registrado')</script>");
             } else {
                 request.setAttribute("error", "<script>alert('Historial NO registrado!')</script>");
             }
@@ -101,7 +103,7 @@ public class HistorialControlador extends HttpServlet {
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
