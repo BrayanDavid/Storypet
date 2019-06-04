@@ -67,8 +67,8 @@
                     <td class="text-center"><%= rs.getString("razas.Nombre")%></td>                        
                     <td class="text-center"><%= rs.getString("FKUsuario")%></td>             
                     <td class="text-center">
-                        <a class="btn btn-warning" id="btnEditarM" data-id="<%= rs.getString("idMascota")%>">Editar</a>
-                        <a class="btn btn-danger" id="btnEliminarM" data-id="<%= rs.getString("idMascota")%>">Eliminar</a>
+                        <a class="btn btn-warning" id="btnEditarM" data-id="<%= rs.getString("idMascota")%>"><i class="fa fa-pencil"></i> Editar</a>
+                        <a class="btn btn-danger" id="btnEliminarM" data-id="<%= rs.getString("idMascota")%>"><i class="fa fa-trash-o"></i> Eliminar</a>
                         <a class="btn btn-primary" data-id="<%= rs.getString("idMascota")%>&Estado=0">Ocultar</a>
                     </td>
                 </tr>
@@ -90,7 +90,7 @@
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                <form action="Mascota" class="text-center" id="formRegistrarMascota">
+                <form  action="Mascota" method="POST" class="text-center" id="formRegistrarMascota">
                     <label>Nombre</label><br>            
                     <input class="bordes" type="text" name="nombre" style="width: 174px;height: 34px;" placeholder=" Nombre" required="true"><br> 
                     <label>Fecha Nacimiento</label><br>
@@ -107,7 +107,6 @@
                         <%
                             EspeciesVO especiesVO = new EspeciesVO();
                             EspeciesDAO especiesDAO = new EspeciesDAO();
-
                             List<EspeciesVO> Listar = especiesDAO.Listar();
                             for (int i = 0; i < Listar.size(); i++) {
                                 especiesVO = Listar.get(i);

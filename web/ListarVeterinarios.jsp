@@ -54,8 +54,8 @@
                 <td class="text-center"><%= rs.getString("Correo")%></td>
                 <td class="text-center"><%= rs.getString("Rol")%></td>
                 <td class="text-center">
-                    <a class="btn btn-warning btnEditarU" data-id="<%=rs.getString("idUsuario")%>">Editar</a>
-                    <a class="btn btn-danger" id="btnEliminarU" data-id="<%=rs.getString("idUsuario")%>">Eliminar</a>
+                    <a class="btn btn-warning btnEditarU" data-id="<%=rs.getString("idUsuario")%>"><i class="fa fa-pencil"></i> Editar</a>
+                    <a class="btn btn-danger" id="btnEliminarU" data-id="<%=rs.getString("idUsuario")%>"><i class="fa fa-trash-o"></i> Eliminar</a>
                     <a class="btn btn-primary" href="Usuario?accion=Estado&id=<%=rs.getString("idUsuario")%>&Estado=0">Ocultar</a>
                 </td>
             </tr>

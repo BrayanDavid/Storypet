@@ -67,8 +67,7 @@ public class Servicios extends HttpServlet {
             } else {
                 request.setAttribute("exito", "<script> alert('Servicio eliminado') </script>");
             }
-
-            acceso = inicio;
+            acceso = list;
 
         } else if (action.equalsIgnoreCase("listar")) {
             acceso = list;

@@ -46,7 +46,10 @@ public class Usuario extends HttpServlet {
         String consulta2 = "ListarVeterinarios.jsp";
         String consultarVet = "listarVet.jsp";
         String inicio = "veterinario.jsp";
+        String perfil = "perfil.jsp";
         String inicio2 = "administrador.jsp";
+        String listarInhabilitados = "UsuariosOcultos.jsp";
+        String listarInhabilitadosVeterinario = "UsuariosOcultosVeterinario.jsp";
 
         UsuarioVO usuario = new UsuarioVO();
         UsuarioDAO DAO = new UsuarioDAO();
@@ -109,6 +112,12 @@ public class Usuario extends HttpServlet {
             acceso = RegistrarVista;
         } else if (action.equalsIgnoreCase("listar")) {
             acceso = consultar;
+        } else if (action.equalsIgnoreCase("perfil")) {
+            acceso = perfil;
+        } else if (action.equalsIgnoreCase("listarInhabilitados")) {
+            acceso = listarInhabilitados;
+        } else if (action.equalsIgnoreCase("listarInhabilitadosVeterinario")) {
+            acceso = listarInhabilitadosVeterinario;
         } else if (action.equalsIgnoreCase("listarVeterinario")) {
             acceso = consulta2;
         } else if (action.equalsIgnoreCase("Editar")) {
@@ -147,16 +156,28 @@ public class Usuario extends HttpServlet {
             } else {
                 request.setAttribute("exito", "<script>alert('El Usuario fue Eliminado correctamente')</script>");
             }
-            acceso = inicio;
+            acceso = consultar;
         } else if (action.equalsIgnoreCase("Estado")) {
             int id = Integer.parseInt(request.getParameter("id"));
             int Estado = Integer.parseInt(request.getParameter("Estado"));
 
             if (DAO.Estado(Estado, id)) {
-                request.setAttribute("error", "<script>alert('no es posible ocultar el usuario')</script>");
+                request.setAttribute("error", "<script>alert('no es posible inhabilitar el usuario')</script>");
             } else {
-                request.setAttribute("exito", "<script>alert('Usuario ocultado')</script>");
+                request.setAttribute("exito", "<script>alert('Usuario inhabilitado')</script>");
             }
+            acceso = inicio;
+
+        } else if (action.equalsIgnoreCase("EstadoActivo")) {
+            int id = Integer.parseInt(request.getParameter("id"));
+            int Estado = Integer.parseInt(request.getParameter("Estado"));
+
+            if (DAO.Estado(Estado, id)) {
+                request.setAttribute("error", "<script>alert('usuario habilitado')</script>");
+            } else {
+                request.setAttribute("exito", "<script>alert('No es posible habilitar usuario')</script>");
+            }
+            acceso = inicio;
 
         } else if (action.equalsIgnoreCase("EstadoVet")) {
 
@@ -174,57 +195,57 @@ public class Usuario extends HttpServlet {
 
             String Correo = request.getParameter("correo");
             String Clave = request.getParameter("clave");
+            String Rol;
 
             usuario.setCorreo(Correo);
             usuario.setContraseña(Clave);
 
-            String usuarioRol = DAO.autenticarUsuario(usuario);
-            UsuarioVO usuarioVO = new UsuarioVO();
+            usuario = DAO.autenticarUsuario(usuario);
+            Rol = usuario.getRol();
 
-            if (usuarioRol.equals("RolAdministrador")) {
+            if (Rol.equals("admin")) {
                 HttpSession Sesion = request.getSession();
-
-                Sesion.setAttribute("correo", Correo);
-
-                Sesion.setAttribute("Usuario", usuarioVO.getUsuario());
-                Sesion.setAttribute("Nombres", usuarioVO.getNombres());
-                Sesion.setAttribute("Apellidos", usuarioVO.getApellidos());
-                Sesion.setAttribute("Telefono", usuarioVO.getTelefono());
-                Sesion.setAttribute("Correo", usuarioVO.getCorreo());
-                Sesion.setAttribute("Rol", usuarioVO.getRol());
+                Sesion.setAttribute("Correo", Correo);
+                Sesion.setAttribute("Usuario", usuario.getUsuario());
+                Sesion.setAttribute("Nombres", usuario.getNombres());
+                Sesion.setAttribute("Apellidos", usuario.getApellidos());
+                Sesion.setAttribute("Telefono", usuario.getTelefono());
+                Sesion.setAttribute("Correo", usuario.getCorreo());
+                Sesion.setAttribute("Rol", usuario.getRol());
 
                 request.getRequestDispatcher("administrador.jsp").forward(request, response);
                 return;
 
-            } else if (usuarioRol.equals("RolCliente")) {
-
+            } else if (Rol.equals("cliente")) {
                 HttpSession Sesion = request.getSession();
-                Sesion.setAttribute("correo", Correo);
-                request.setAttribute("correo", Correo);
+                Sesion.setAttribute("Correo", Correo);
+                Sesion.setAttribute("Usuario", usuario.getUsuario());
+                Sesion.setAttribute("Nombres", usuario.getNombres());
+                Sesion.setAttribute("Apellidos", usuario.getApellidos());
+                Sesion.setAttribute("Telefono", usuario.getTelefono());
+                Sesion.setAttribute("Correo", usuario.getCorreo());
+                Sesion.setAttribute("Rol", usuario.getRol());
+
                 request.getRequestDispatcher("cliente.jsp").forward(request, response);
                 return;
 
-            } else if (usuarioRol.equals("RolVeterinario")) {
-
+            } else if (Rol.equals("veterinario")) {
                 HttpSession Sesion = request.getSession();
-                Sesion.setAttribute("correo", Correo);
-                Sesion.setAttribute("Usuario", usuarioVO.getUsuario());
-                Sesion.setAttribute("Nombres", usuarioVO.getNombres());
-                Sesion.setAttribute("Apellidos", usuarioVO.getApellidos());
-                Sesion.setAttribute("Telefono", usuarioVO.getTelefono());
-                Sesion.setAttribute("Correo", usuarioVO.getCorreo());
-                Sesion.setAttribute("Rol", usuarioVO.getRol());
+                Sesion.setAttribute("Correo", usuario.getCorreo());
+                Sesion.setAttribute("Usuario", usuario.getUsuario());
+                Sesion.setAttribute("Nombres", usuario.getNombres());
+                Sesion.setAttribute("Apellidos", usuario.getApellidos());
+                Sesion.setAttribute("Telefono", usuario.getTelefono());
+                Sesion.setAttribute("Correo", usuario.getCorreo());
+                Sesion.setAttribute("Rol", usuario.getRol());
 
                 //  request.getRequestDispatcher("InicioAdmin.jsp").forward(request, response);
                 request.getRequestDispatcher("veterinario.jsp").forward(request, response);
-
                 return;
 
-            } else if (usuarioRol.equals("UsuarioInvalido")) {
+            } else if (Rol.equals("usuarioInvalido")) {
                 request.getRequestDispatcher("login.jsp").forward(request, response);
                 request.setAttribute("error", "<script>alert('Usuario o Contraseña Invalida)</script>");
-                acceso = inicio;
-
             }
 
         }

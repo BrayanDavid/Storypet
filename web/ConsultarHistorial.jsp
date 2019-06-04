@@ -33,11 +33,9 @@
 
         <h1 class="text-center">Consultar Historial</h1>
         <a class="add-proj brd-rd5" href="#" data-toggle="modal" data-target=".bs-example-modal-sm" title="Add Project">+ Agregar</a>
-
+        <br/>
+        <br/>
         <%
-            HttpSession miSesion = request.getSession();
-            String cedula;
-
             Conexion conexion = new Conexion();
             Statement puente;
             ResultSet rs;
@@ -45,46 +43,43 @@
             rs = puente.executeQuery("SELECT historialclinico.idHistorialClinico,historialclinico.Fecha,historialclinico.Novedad,servicios.Servicio,mascotas.Nombre,usuarios.Nombres FROM servicios INNER JOIN historialclinico on servicios.idServicio=historialclinico.FKServicio INNER JOIN mascotas ON historialclinico.FKMascota=mascotas.idMascota INNER JOIN usuarios ON mascotas.FKUsuario=usuarios.idUsuario ;");
         %>
 
-        <div class="container">
-            <form action="Historial">
-                <br>
-                <table id="datatable-keytable" class="table table-striped table-bordered" style="width: 100%;">
-                    <thead>
-                        <tr>
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">ID</td>
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Fecha</td>
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Novedad</td>
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Servicio</td>
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Mascota</td>  
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Usuario</td>  
-                            <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Acciones</td>
-                        </tr>               
+        <form action="Historial"method="POST">
+            <table id="datatable-keytable" class="table table-striped table-bordered" style="width: 100%;">
+                <thead>
+                    <tr>
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">ID</td>
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Fecha</td>
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Novedad</td>
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Servicio</td>
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Mascota</td>  
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Usuario</td>  
+                        <td style="border 1px;border-bottom-color: #007bff;" class="text-center">Acciones</td>
+                    </tr>               
 
-                    </thead>
+                </thead>
 
-                    <%
-                        while (rs.next()) {
-                    %>
-                    <tbody>
-                        <tr>
-                            <td class="text-center"><%= rs.getString("historialclinico.idHistorialClinico")%></td>                       
-                            <td class="text-center"><%= rs.getString("historialclinico.Fecha")%></td>                       
-                            <td class="text-center"><%= rs.getString("historialclinico.Novedad")%></td>                       
-                            <td class="text-center"><%= rs.getString("servicios.Servicio")%></td>
-                            <td class="text-center"><%= rs.getString("mascotas.Nombre")%></td>
-                            <td class="text-center"><%= rs.getString("usuarios.Nombres")%></td>
-                            <td class="text-center">
-                                <a class="btn btn-warning" id="btnEditarH" data-id="<%= rs.getString("historialclinico.idHistorialClinico")%>">Editar</a>
-                                <a class="btn btn-danger" id="btnEliminarH" data-id="<%= rs.getString("historialclinico.idHistorialClinico")%>">Eliminar</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <%
-                        }
-                    %> 
-                </table>
-            </form>
-        </div>
+                <%
+                    while (rs.next()) {
+                %>
+                <tbody>
+                    <tr>
+                        <td class="text-center"><%= rs.getString("historialclinico.idHistorialClinico")%></td>                       
+                        <td class="text-center"><%= rs.getString("historialclinico.Fecha")%></td>                       
+                        <td class="text-center"><%= rs.getString("historialclinico.Novedad")%></td>                       
+                        <td class="text-center"><%= rs.getString("servicios.Servicio")%></td>
+                        <td class="text-center"><%= rs.getString("mascotas.Nombre")%></td>
+                        <td class="text-center"><%= rs.getString("usuarios.Nombres")%></td>
+                        <td class="text-center">
+                            <a class="btn btn-warning" id="btnEditarH" data-id="<%= rs.getString("historialclinico.idHistorialClinico")%>"><i class="fa fa-pencil"></i> Editar</a>
+                            <a class="btn btn-danger btnEliminarH" data-id="<%= rs.getString("historialclinico.idHistorialClinico")%>"><i class="fa fa-trash-o"></i> Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+                <%
+                    }
+                %> 
+            </table>
+        </form>
 
         <!-- Modal -->
         <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true">
@@ -96,7 +91,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                        <form action="Historial" class="text-center" id="formRegistrarHistorial">
+                        <form action="Historial" class="text-center" id="formRegistrarHistorial" method="POST">
                             <label>Fecha</label><br>
                             <input type="text" id="inFecha" readonly name="fecha" ><br><br>
                             <label>Novedad</label><br>
@@ -114,7 +109,8 @@
                                 %>
 
                                 <option value="<%=serviciosVo.getTipoServicio()%>"><%=serviciosVo.getTipoServicio()%></option>
-                                <%}
+                                <%
+                                    }
                                 %>
                             </select>
 
@@ -139,59 +135,55 @@
                             <br>
                             <label>Usuario</label><br>
                             <input class="bordes" placeholder="Cedula" type="number" name="idUsuario">
-                            <br> <br>    
-                            <input class="btn btn-outline-primary" type="submit" name="accion" value="Registrar">
+                            <br> <br> 
+                            <input id="btnRegistrar" class="btn btn-outline-primary" type="submit" name="accion" value="Registrar">
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                            </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <%if (request.getAttribute("error") != null) {%>
-        ${error}
-        <%} else {%>
-        ${exito}
-        <%}%> 
+            <script>
 
-        <script>
+                $(document).ready(function () {
+                    var f = new Date();
+                    var fecha = f.getFullYear() + "/" + (f.getMonth() + 1) + "/" + f.getDate();
+                    document.getElementById("inFecha").value = fecha;
+                });
 
-            $(document).ready(function () {
-                var f = new Date();
-                var fecha = f.getFullYear() + "/" + (f.getMonth() + 1) + "/" + f.getDate();
-                document.getElementById("inFecha").value = fecha;
-            });
+                $('#datatable-keytable').DataTable({
+                    language: {
+                        "decimal": "",
+                        "emptyTable": "No hay información",
+                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                        "infoPostFix": "",
+                        "thousands": ",",
+                        "lengthMenu": "Mostrar _MENU_ Entradas",
+                        "loadingRecords": "Cargando...",
+                        "processing": "Procesando...",
+                        "search": "Buscar:",
+                        "zeroRecords": "Sin resultados encontrados",
+                        "paginate": {
+                            "first": "Primero",
+                            "last": "Ultimo",
+                            "next": "Siguiente",
+                            "previous": "Anterior"
+                        }
+                    },
+                });
 
-            $('#datatable-keytable').DataTable({
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                },
-            });
+            </script>
 
-        </script>
-        <%if (request.getAttribute("error") != null) {%>
-        ${error}
-        <%} else {%>
-        ${exito}
-        <%}%> 
+            <%if (request.getAttribute("error") != null) {%>
+            ${error}
+            <%} else {%>
+            ${exito}
+            <%}%> 
     </body>
 </html>

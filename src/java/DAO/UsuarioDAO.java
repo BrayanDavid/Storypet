@@ -168,21 +168,12 @@ public class UsuarioDAO extends Conexion implements CRUD_USUARIO {
         return usuario;
     }
 
-    public String autenticarUsuario(UsuarioVO usuarioVo) {
+    public UsuarioVO autenticarUsuario(UsuarioVO usuarioVo) {
 
         String Correo = usuarioVo.getCorreo();
         String Clave = usuarioVo.getContraseña();
 
-        String Sql = "select IdUsuario,Usuario,Contraseña,Nombres,Apellidos,Telefono,Correo,Rol from usuarios;";
-
-        String idUsuarioBD = "";
-        String UsuarioBD = "";
-        String NombresBD = "";
-        String ApellidosBD = "";
-        String TelefonoBD = "";
-        String claveBD = "";
-        String correoBD = "";
-        String rolBD = "";
+        String Sql = "select IdUsuario,Usuario,Contraseña,Nombres,Apellidos,Telefono,Correo,Rol from usuarios where Correo='" + Correo + "' and Contraseña='" + Clave + "' ;";
 
         try {
             conn = conexion.obtenerConexion();
@@ -190,22 +181,14 @@ public class UsuarioDAO extends Conexion implements CRUD_USUARIO {
             rs = puente.executeQuery(Sql);
             while (rs.next()) {
 
-                idUsuarioBD = rs.getString("IdUsuario");
-                UsuarioBD = rs.getString("Usuario");
-                NombresBD = rs.getString("Nombres");
-                ApellidosBD = rs.getString("Apellidos");
-                TelefonoBD = rs.getString("Telefono");
-                correoBD = rs.getString("Correo");
-                claveBD = rs.getString("Contraseña");
-                rolBD = rs.getString("Rol");
-
-                if (Correo.equals(correoBD) && Clave.equals(claveBD) && rolBD.equals("admin")) {
-                    return "RolAdministrador";
-                } else if (Correo.equals(correoBD) && Clave.equals(claveBD) && rolBD.equals("cliente")) {
-                    return "RolCliente";
-                } else if (Correo.equals(correoBD) && Clave.equals(claveBD) && rolBD.equals("veterinario")) {
-                    return "RolVeterinario";
-                }
+                usuarioVo.setIdUsuario(rs.getString("IdUsuario"));
+                usuarioVo.setUsuario(rs.getString("Usuario"));
+                usuarioVo.setNombres(rs.getString("Nombres"));
+                usuarioVo.setApellidos(rs.getString("Apellidos"));
+                usuarioVo.setTelefono(rs.getString("Telefono"));
+                usuarioVo.setCorreo(rs.getString("Correo"));
+                usuarioVo.setContraseña(rs.getString("Contraseña"));
+                usuarioVo.setRol(rs.getString("Rol"));
 
             }
             this.cerrarConexion();
@@ -214,7 +197,7 @@ public class UsuarioDAO extends Conexion implements CRUD_USUARIO {
             e.printStackTrace();
             //Logger.getLogger(DAO.UsuarioDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        return "UsuarioInvalido";
+        return usuarioVo;
     }
 
     public List ListarVeterinario() {

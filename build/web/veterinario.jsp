@@ -49,14 +49,24 @@
                         <%
                             //recojemos sesion.
                             HttpSession sesion = request.getSession();
-                            //creamos variables
+                            //creamos variables                            
+                            String usuario;
+                            String nombre;
+                            String apellido;
+                            String telefono;
                             String correo;
+                            String rol;
+
                             // guardamos variables traidas de la session.
-                            correo = sesion.getAttribute("correo").toString();
+                            usuario = sesion.getAttribute("Usuario").toString();
+                            nombre = sesion.getAttribute("Nombres").toString();
+                            apellido = sesion.getAttribute("Apellidos").toString();
+                            telefono = sesion.getAttribute("Telefono").toString();
+                            correo = sesion.getAttribute("Correo").toString();
+                            rol = sesion.getAttribute("Rol").toString();
+
                             //validamos correo
-                            if (sesion.getAttribute("correo") != null) {
-                                // guardamos variables traidas de la session.
-                                correo = sesion.getAttribute("correo").toString();
+                            if (sesion.getAttribute("Correo") != null) {
                         %>
                         <!-- menu profile quick info -->
                         <div class="profile clearfix">
@@ -65,7 +75,7 @@
                             </div>
                             <div class="profile_info">
                                 <span>Bienvenido,</span>
-                                <h2><%= correo%></h2>
+                                <h2><%= nombre%></h2>
                             </div>
                         </div>
                         <%
@@ -89,6 +99,7 @@
                                             <li><a id="btnMascotas" >Mascotas</a></li>  <!-- Mascotas admin2 -->
                                             <li><a id="btnHistorial">Historial</a></li>  <!-- Historia index -->
                                             <li><a id="btnServicios">Servicios</a></li>  <!-- servicios admin4 -->
+                                            <li><a id="btninhabilitados">Inhabilitados</a></li>  <!-- inhabilitados -->
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -213,11 +224,11 @@
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="">
                                     <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                        <img src="images/img.jpg" alt=""><%= correo%>
+                                        <img src="images/img.jpg" alt=""><%= nombre%>
                                         <span class=" fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu pull-right">
-                                        <li><a href="javascript:;"> Perfil</a></li>
+                                        <li><a id="btnPerfil"> Perfil</a></li>
                                         <li>
                                             <a href="javascript:;">
                                                 <span class="badge bg-red pull-right">50%</span>
@@ -390,7 +401,7 @@
                         })
                     })
 
-                    $("#btnEliminarU").click(function () {
+                    $(".btnEliminarU").click(function () {
                         alert('btnEliminarU')
                         var id = $(this).attr("data-id")
                         console.log("Eliminar Usuario: " + id)
@@ -501,8 +512,8 @@
                         })
                     })
 
-                    $("#btnEliminarM").click(function () {
-                        alert("eliminarrMascota")
+                    $(".btnEliminarH").click(function () {
+                        alert("eliminarHistorial")
                         var id = $(this).attr("data-id")
                         $.ajax({
                             url: 'Historial',
@@ -604,6 +615,36 @@
                         })
 
                     })
+
+
+                    $("#btninhabilitados").click(function () {
+                        $.ajax({
+                            url: 'Usuario',
+                            method: 'POST',
+                            data: {'accion': 'listarInhabilitadosVeterinario'},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                            },
+                            error: function () {
+                                alert("No se ha podido obtener la información")
+                            }
+                        })
+                    })
+
+                    $("#btnPerfil").click(function () {
+                        $.ajax({
+                            url: 'Usuario',
+                            method: 'POST',
+                            data: {'accion': 'perfil'},
+                            success: function (respuesta) {
+                                $("#contenido_principal").html(respuesta)
+                            },
+                            error: function () {
+                                alert("No se ha podido obtener la información")
+                            }
+                        })
+                    })
+
 
                 })
             </script>

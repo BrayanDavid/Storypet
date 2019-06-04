@@ -95,11 +95,8 @@
                                 <ul class="nav side-menu">
                                     <li><a><i class="fa fa-home"></i> Inicio <span class="fa fa-chevron-down"></span></a>
                                         <ul class="nav child_menu">
-                                            <li><a id="btnClientes">Clientes</a></li>  <!-- Clientes admin3 -->
-                                            <li><a id="btnMascotas" >Mascotas</a></li>  <!-- Mascotas admin2 -->
+                                            <li><a id="btnMascotas" >Mascota</a></li>  <!-- Mascotas admin2 -->
                                             <li><a id="btnHistorial">Historial</a></li>  <!-- Historia index -->
-                                            <li><a id="btnServicios">Servicios</a></li>  <!-- servicios admin4 -->
-                                            <li><a id="btninhabilitados">Inhabilitados</a></li>  <!-- inhabilitados -->
                                         </ul>
                                     </li>
                                     <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
@@ -382,80 +379,6 @@
             <script src="./build/js/custom.min.js"></script>
 
             <script>
-                function activarEditarEliminarUsuario() {
-                    $(".btnEditarU").click(function () {
-                        alert('btnEditarU')
-                        var id = $(this).attr("data-id")
-                        console.log("Editar Usuario: " + id)
-                        $.ajax({
-                            url: 'Usuario',
-                            method: 'POST',
-                            data: {'accion': 'Editar', 'id': id},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarUsuario()
-                            },
-                            error: function () {
-                                alert("No se ha podido editar")
-                            }
-                        })
-                    })
-
-                    $(".btnEliminarU").click(function () {
-                        alert('btnEliminarU')
-                        var id = $(this).attr("data-id")
-                        console.log("Eliminar Usuario: " + id)
-                        $.ajax({
-                            url: 'Usuario',
-                            method: 'POST',
-                            data: {'accion': 'Eliminar', 'id': id},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarUsuario()
-                            },
-                            error: function () {
-                                alert("No se ha podido eliminar")
-                            }
-                        })
-                    })
-
-                }
-
-                function activarEditarEliminarServicio() {
-                    $(".btnEditarS").click(function () {
-                        alert('EditarServicio')
-                        var id = $(this).attr("data-id")
-                        $.ajax({
-                            url: 'Servicios',
-                            method: 'POST',
-                            data: {'accion': 'Editar', 'idServicio': id},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarServicio()
-                            },
-                            error: function () {
-                                alert("No se ha podido editar")
-                            }
-                        })
-                    })
-
-                    $(".btnEliminarS").click(function () {
-                        alert('EliminarServicio')
-                        var id = $(this).attr("data-id")
-                        $.ajax({
-                            url: 'Servicios',
-                            method: 'POST',
-                            data: {'accion': 'Eliminar', 'idServicio': id},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                // activarEditarEliminarServicio()
-                            },
-                            error: function () {
-                                alert("No se ha podido editar")
-                            }
-                        })
-                    })
-                }
 
                 function activarEditarEliminarMascota() {
                     $("#btnEditarM").click(function () {
@@ -551,38 +474,6 @@
                     })
 
 
-                    $("#btnClientes").click(function () {
-                        $.ajax({
-                            url: 'Usuario',
-                            method: 'POST',
-                            data: {'accion': 'listar'},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarUsuario()
-                            },
-                            error: function () {
-                                alert("No se ha podido obtener la información")
-                            }
-                        })
-                    })
-
-
-                    $("#btnServicios").click(function () {
-                        $.ajax({
-                            url: 'Servicios',
-                            method: 'POST',
-                            data: {'accion': 'listar'},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                                activarEditarEliminarServicio()
-                            },
-                            error: function () {
-                                alert("No se ha podido obtener la información")
-                            }
-                        })
-                    })
-
-
                     $("#btnHistorial").click(function () {
                         $.ajax({
                             url: 'Historial',
@@ -613,22 +504,6 @@
                                 alert("No se ha podido obtener la información")
                             }
                         })
-
-                    })
-
-
-                    $("#btninhabilitados").click(function () {
-                        $.ajax({
-                            url: 'Usuario',
-                            method: 'POST',
-                            data: {'accion': 'listarInhabilitadosVeterinario'},
-                            success: function (respuesta) {
-                                $("#contenido_principal").html(respuesta)
-                            },
-                            error: function () {
-                                alert("No se ha podido obtener la información")
-                            }
-                        })
                     })
 
                     $("#btnPerfil").click(function () {
@@ -644,7 +519,6 @@
                             }
                         })
                     })
-
 
                 })
             </script>

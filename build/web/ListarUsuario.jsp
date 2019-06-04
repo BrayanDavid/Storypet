@@ -54,8 +54,8 @@
                 <td class="text-center"><%= rs.getString("Correo")%></td>
                 <td class="text-center"><%= rs.getString("Rol")%></td>
                 <td class="text-center">
-                    <a class="btn btn-warning btnEditarU" data-id="<%=rs.getString("idUsuario")%>">Editar</a>
-                    <a class="btn btn-danger" id="btnEliminarU" data-id="<%=rs.getString("idUsuario")%>">Eliminar</a>
+                    <a class="btn btn-warning btnEditarU" data-id="<%=rs.getString("idUsuario")%>"><i class="fa fa-pencil"></i> Editar</a>
+                    <a class="btn btn-danger btnEliminarU" data-id="<%=rs.getString("idUsuario")%>"><i class="fa fa-trash-o"></i> Eliminar</a>
                     <a class="btn btn-primary" href="Usuario?accion=Estado&id=<%=rs.getString("idUsuario")%>&Estado=0">Ocultar</a>
                 </td>
             </tr>
@@ -126,13 +126,53 @@
 
     $(document).ready(function () {
 
-        $("#formRegistrarUsuario").submit(function () {
-            return false
+        $("#formRegistrarUsuario").validate({
+            rules: {
+                cedula: {
+                    required: true,
+                    number: true,
+                    rangelength: [1, 10],
+                },
+                usuario: {
+                    required: true,
+                },
+                clave: {
+                    required: true,
+                    number: true,
+                },
+                nombre: {
+                    required: true,
+                },
+                apellidos: {
+                    required: true,
+                },
+                telefono: {
+                    required: true,
+                    number: true,
+                    rangelength: [7, 10],
+                },
+                correo: {
+                    required: true,
+                    email: true,
+                },
+            },
+            messages: {
+                cedula:
+                        {
+                            required: "Campo obligatorio",
+                            number: "Campo númerico",
+                            rangelength: "Debe estar entre 1 a 10 dígitos",
+                        },
+                telefono:
+                        {
+                            required: "Campo obligatorio",
+                            number: "Campo númerico",
+                            rangelength: "Debe estar entre 7 a 10 números",
+                        },
+            },
         })
 
         $("#btnRegistrar").click(function () {
-            let formulario = $("form").serialize()
-            $("#formRegistrarUsuario").submit()
             $("#formRegistrarUsuario").validate({
                 rules: {
                     cedula: {
@@ -177,21 +217,6 @@
                                 rangelength: "Debe estar entre 7 a 10 números",
                             },
                 },
-                submitHandler: function () {
-                    $.ajax({
-                        url: 'Usuario',
-                        method: 'POST',
-                        data: {'accion': 'Registrar', 'datos': formulario},
-                        success: function () {
-                            alert("Usuario Registrado")
-                            // $("#contenido_principal").html(respuesta)
-                        },
-                        error: function () {
-                            alert("Usuario No Registrado");
-                        }
-                    })
-                }
-
             })
         })
     });

@@ -7,7 +7,6 @@ package Controlador;
 
 import DAO.HistorialDao;
 import VO.HistorialVo;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
@@ -19,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Admin
+ * @author Brayan
  */
-@WebServlet(name = "Historial", urlPatterns = {"/Historial"})
-public class Historial extends HttpServlet {
+@WebServlet(name = "HistorialControlador", urlPatterns = {"/Historial"})
+public class HistorialControlador extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,8 +36,8 @@ public class Historial extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-
-        String action = request.getParameter("accion");
+        
+         String action = request.getParameter("accion");
         HistorialVo historialVo = new HistorialVo();
         HistorialDao dao = new HistorialDao();
 
@@ -83,7 +82,7 @@ public class Historial extends HttpServlet {
             String novedad = request.getParameter("novedad");
             String servicio = request.getParameter("servicio");
             String mascota = request.getParameter("mascota");
-            String usuario = request.getParameter("usuario");
+            String usuario = request.getParameter("idUsuario");
 
             historialVo.setFecha(fecha);
             historialVo.setNovedad(novedad);
@@ -92,16 +91,17 @@ public class Historial extends HttpServlet {
             historialVo.setFKUsuario(usuario);
 
             if (dao.Agregar(historialVo)) {
-                request.setAttribute("error", "<script>alert('Historial NO registrado!')</script>");
+                  request.setAttribute("exito", "<script>alert('Historial registrado')</script>");   
             } else {
-                request.setAttribute("exito", "<script>alert('Historial registrado')</script>");
+                request.setAttribute("error", "<script>alert('Historial NO registrado!')</script>");
             }
-            acceso = consultar;
+            acceso = inicio;
         } else {
 
         }
         RequestDispatcher vista = request.getRequestDispatcher(acceso);
         vista.forward(request, response);
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

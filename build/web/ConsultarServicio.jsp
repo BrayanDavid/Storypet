@@ -52,8 +52,8 @@
                         <td class="text-center"><%= rs.getString("IdServicio")%></td>
                         <td class="text-center"><%= rs.getString("Servicio")%></td>
                         <td class="text-center">
-                            <a class="btn btn-warning btnEditarS" data-id="<%= rs.getString("IdServicio")%>">Editar</a>
-                            <a class="btn btn-danger btnEliminarS" data-id="<%= rs.getString("IdServicio")%>">Eliminar</a>
+                            <a class="btn btn-warning btnEditarS" data-id="<%= rs.getString("IdServicio")%>"><i class="fa fa-pencil"></i> Editar</a>
+                            <a class="btn btn-danger btnEliminarS" data-id="<%= rs.getString("IdServicio")%>"><i class="fa fa-trash-o"></i> Eliminar</a>
                         </td>
                     </tr>  
                     <%

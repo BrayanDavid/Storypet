@@ -30,7 +30,7 @@ public class HistorialDao extends Conexion {
     }
 
     public boolean Agregar(HistorialVo historialVo) {
-        String Sql = "INSERT INTO historialclinico(Fecha,Novedad,FKServicio,FKMascota,FKUsuario)VALUES('" + historialVo.getFecha() + "','" + historialVo.getNovedad() + "','" + historialVo.getFKServicio() + "','" + historialVo.getFKMascota() + "','" + historialVo.getFKUsuario() + "' )";
+        String Sql = "INSERT INTO `historialclinico` (`Fecha`, `Novedad`, `FKServicio`, `FKMascota`, `FKUsuario`) VALUES ('" + historialVo.getFecha() + "', '" + historialVo.getNovedad() + "', '"+historialVo.getFKServicio()+"', '"+historialVo.getFKMascota()+"', '"+historialVo.getFKUsuario()+"');";
         try {
             conn = conex.obtenerConexion();
             puente = conn.prepareStatement(Sql);
@@ -56,7 +56,7 @@ public class HistorialDao extends Conexion {
     }
 
     public boolean Actualizar(HistorialVo historial) {
-        String Sql = "UPDATE historialclinico SET Novedad='" + historial.getNovedad() + "' WHERE idHistorialClinico='" + historial.getIdHistorialClinico() + "' ";
+        String Sql = "UPDATE historialclinico SET Novedad='" + historial.getNovedad() + "' WHERE idHistorialClinico='" + historial.getIdHistorialClinico() ;
         try {
             conn = conex.obtenerConexion();
             puente = conn.prepareStatement(Sql);

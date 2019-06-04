@@ -52,8 +52,8 @@ public class MascotaControlador extends HttpServlet {
             String Nombre = request.getParameter("nombre");
             String FechaNacimiento = request.getParameter("fechaNacimiento");
             String Sexo = request.getParameter("sexo");
-            String IdRaza = request.getParameter("fkRaza");
-            String IdUsuario = request.getParameter("fkUsuario");
+            String IdRaza = request.getParameter("idRaza");
+            String IdUsuario = request.getParameter("idUsuario");
 
             mascotaVO.setNombre(Nombre);
             mascotaVO.setFechaNacimiento(FechaNacimiento);
